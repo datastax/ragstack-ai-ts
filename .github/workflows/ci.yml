@@ -1,4 +1,4 @@
-name: CI - E2E tests
+name: CI
 on:
   workflow_dispatch: {}
   # schedule:
@@ -25,13 +25,38 @@ jobs:
       is-scheduled: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@v4
-        # TODO: lint
-#      - name: Run lint
-#        uses: ./.github/actions/lint
+      - name: Lint
+        run: |
+          cd ragstack-ai-js
+          yarn install --immutable
+          yarn run lint
+          cd ../ragstack-ai-js-e2e-tests
+          yarn install --immutable
+          yarn run lint
+      - name: Unit tests
+        run: |
+          cd ragstack-ai-js
+          yarn run test
       - uses: dorny/paths-filter@v2
         id: filter
         with:
           filters: ./.github/changes-filter.yaml
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: ./.github/actions/setup-node
+
+      - name: Run unit tests
+        run: |
+          cd ragstack-ai-js
+          yarn install --immutable
+          yarn run test
 
   ragstack-dev-dse-tests:
     name: "RAGStack dev / DSE"

@@ -3,5 +3,5 @@ e2e_tests:
   - added|deleted|modified: "ragstack-ai-js-e2e-tests/**"
   - "ragstack-ai-js/package.json"
   - "./.github/actions/**"
-  - "./.github/workflows/ci-e2e-tests.yml"
+  - "./.github/workflows/ci.yml"
   - "./.github/workflows/_run_e2e_tests.yml"
