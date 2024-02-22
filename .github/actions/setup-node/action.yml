@@ -1,0 +1,13 @@
+name: Setup Node
+description: Setup Node and tools
+
+inputs:
+  node-version:
+    default: "18"
+    description: "Node version"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}

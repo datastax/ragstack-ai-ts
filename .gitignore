@@ -123,13 +123,16 @@ dist
 .vscode-test
 
 # yarn v2
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
+.yarn
+.yarn
+.yarn
+.yarn
 .pnp.*
 
 .idea
 creds.json
 .DS_Store
 build.zip
+
+ragstack-ai-js/yarn.lock
+package-lock.json

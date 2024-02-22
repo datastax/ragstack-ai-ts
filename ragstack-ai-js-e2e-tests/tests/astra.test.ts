@@ -1,7 +1,7 @@
 import {expect, test} from '@jest/globals';
 import {ChatOpenAI} from "@langchain/openai";
+// @ts-ignore
 import {getRequiredEnv} from "./config";
-
 
 
 describe("Compatibility matrix", () => {

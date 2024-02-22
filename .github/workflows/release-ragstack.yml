@@ -1,0 +1,33 @@
+name: Release RAGStack package
+
+on:
+  push:
+    tags:
+      - "ragstack-ai-*"
+
+jobs:
+  release:
+    name: Release package
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      # TODO: release on npm
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "dist/*.whl"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generateReleaseNotes: true
+          prerelease: false
+
+      - name: Compute release number
+        id: release-number
+        shell: bash
+        run: |
+          echo "release-number=$(echo ${{ github.ref }} | sed -e 's/refs\/tags\/ragstack-ai-//')" >> $GITHUB_OUTPUT
+
+      # TODO: build docker image

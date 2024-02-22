@@ -1,9 +1,7 @@
 {
-  "name": "@datastax/ragstack-ai-js",
-  "description": "DataStax RAGStack JS",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "BUSL-1.1",
+  "name": "@datastax/ragstack-ai-js-tests",
+  "version": "0.0.1",
+  "license": "MIT",
   "author": {
     "name": "DataStax"
   },
@@ -11,10 +9,8 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@langchain/openai": "^0.0.14",
-    "langchain": "0.1.21"
+    "@datastax/ragstack-ai-js": "../ragstack-ai-js"
   },
-  "packageManager": "yarn@3.4.1",
   "scripts": {
     "format": "turbo run format",
     "format:check": "turbo run format:check",

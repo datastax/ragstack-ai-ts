@@ -1,1 +1,1 @@
-# ragstack-ai-ts
+# RAGStack (JS)
