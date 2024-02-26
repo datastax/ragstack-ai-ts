@@ -5,11 +5,10 @@
     "lib": ["es6"],
     "allowJs": true,
     "outDir": "build",
-    "rootDir": "src",
+    "rootDir": "tests",
     "strict": true,
     "esModuleInterop": true,
     "types": ["node", "jest"],
     "skipLibCheck": true
-  },
-  "include": ["tests/**/*"],
+  }
 }

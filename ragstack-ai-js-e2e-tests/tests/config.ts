@@ -1,3 +1,6 @@
+import {AstraDBVectorStoreHandler, VectorStoreHandler} from "./vectorStore";
+import 'dotenv/config'
+require('dotenv').config()
 
 export function getRequiredEnv(name: string): string {
     const value = process.env[name]
@@ -6,6 +9,12 @@ export function getRequiredEnv(name: string): string {
     }
     return value
 
+}
+
+const vectorStoreHandler = new AstraDBVectorStoreHandler()
+
+export function getVectorStoreHandler(): VectorStoreHandler {
+    return vectorStoreHandler
 }
 
 function onBeforeEach() {
