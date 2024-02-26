@@ -1,33 +1,37 @@
-import {expect, test} from '@jest/globals';
 import {getRequiredEnv, getVectorStoreHandler} from '../config';
 import {AstraDBVectorStore, AstraLibArgs} from "@langchain/community/vectorstores/astradb";
-import {FakeEmbeddings} from "@langchain/core/utils/testing";
 import {Document} from "@langchain/core/documents";
-import {CreateCollectionOptions} from "@datastax/astra-db-ts/dist/collections/options";
 import {PromptTemplate} from "@langchain/core/prompts";
 import {RunnablePassthrough, RunnableSequence} from "@langchain/core/runnables";
 import {StringOutputParser} from "@langchain/core/output_parsers";
 import {VectorStore} from "@langchain/core/vectorstores";
-import {LLM} from "@langchain/core/dist/language_models/llms";
+import {LLM} from "@langchain/core/language_models/llms";
 import {EmbeddingsInterface} from "@langchain/core/embeddings";
-import {cosineSimilarity} from "@langchain/core/dist/utils/math";
 import {ChatOpenAI, OpenAIEmbeddings} from "@langchain/openai";
-import {BaseLanguageModel} from "@langchain/core/dist/language_models/base";
-
+import {BaseLanguageModel} from "@langchain/core/language_models/base";
+import {CassandraLibArgs, CassandraStore} from "@langchain/community/vectorstores/cassandra";
+import {isTypedArray} from "util/types";
+import {expect} from "@jest/globals";
+import {randomUUID} from "node:crypto";
+import {CassandraChatMessageHistory} from "@langchain/community/stores/message/cassandra";
+import {AIMessage} from "@langchain/core/messages";
 
 describe("RAG pipeline compatibility", () => {
-    // beforeEach(async () => {
-    //     await getVectorStoreHandler().beforeTest()
-    // })
-    // afterEach(async () => {
-    //     await getVectorStoreHandler().afterTest()
-    // })
+    beforeEach(async () => {
+        await getVectorStoreHandler().beforeTest()
+    })
+    afterEach(async () => {
+        await getVectorStoreHandler().afterTest()
+    })
 
     class EmbeddingsInfo {
-        constructor(readonly embeddings: EmbeddingsInterface, readonly dimensions: number) {
+        public embeddings: EmbeddingsInterface;
+        public dimensions: number;
+        constructor(embeddings: EmbeddingsInterface, dimensions: number) {
+            this.embeddings = embeddings
+            this.dimensions = dimensions
         }
     }
-
 
     type EmbeddingsInfoSupplier = () => EmbeddingsInfo;
 
@@ -36,7 +40,13 @@ describe("RAG pipeline compatibility", () => {
     type LLMSupplier = () => BaseLanguageModel;
 
     class RAGCombination {
-        constructor(readonly vectorStore: VectorStoreSupplier, readonly embeddings: EmbeddingsInfoSupplier, readonly llm: Function) {
+        vectorStore: VectorStoreSupplier;
+        embeddings: EmbeddingsInfoSupplier;
+        llm: LLMSupplier;
+        constructor(vectorStore: VectorStoreSupplier, embeddings: EmbeddingsInfoSupplier, llm: LLMSupplier) {
+            this.vectorStore = vectorStore
+            this.embeddings = embeddings
+            this.llm = llm
         }
     }
 
@@ -59,6 +69,19 @@ describe("RAG pipeline compatibility", () => {
         }
     }
 
+    function cassandra(): VectorStoreSupplier {
+        return async (embeddings: EmbeddingsInfo) => {
+            await getVectorStoreHandler().beforeTest()
+            const config: CassandraLibArgs = {
+                ...getVectorStoreHandler().getBaseCassandraLibArgs(embeddings.dimensions),
+                primaryKey: [{ name: "id", type: "uuid", partition: true }],
+                // with metadata won't work, see https://github.com/langchain-ai/langchainjs/pull/4516
+                metadataColumns: [{name: "metadata", type: "text"}]
+            }
+            return new CassandraStore(embeddings.embeddings, config);
+        }
+    }
+
     function openAIEmbeddings(): EmbeddingsInfoSupplier {
         return () => new EmbeddingsInfo(new OpenAIEmbeddings({openAIApiKey: getRequiredEnv("OPEN_AI_KEY")}), 1536)
 
@@ -70,11 +93,16 @@ describe("RAG pipeline compatibility", () => {
 
 
     class EmbeddingsLLMPair {
-        constructor(readonly embeddings: EmbeddingsInfoSupplier, readonly llm: LLMSupplier) {
+        embeddings: EmbeddingsInfoSupplier;
+        llm: LLMSupplier;
+        constructor(embeddings: EmbeddingsInfoSupplier, llm: LLMSupplier) {
+            this.embeddings = embeddings
+            this.llm = llm
         }
     }
 
-    let vectorStores: Array<VectorStoreSupplier> = [astraDB()]
+    // let vectorStores: Array<VectorStoreSupplier> = [astraDB()]
+    let vectorStores: Array<VectorStoreSupplier> = [cassandra()]
     let embeddingsLLM: Array<EmbeddingsLLMPair> = [
         new EmbeddingsLLMPair(openAIEmbeddings(), openAILLM())
     ]
@@ -86,7 +114,6 @@ describe("RAG pipeline compatibility", () => {
     }
 
     test.each<RAGCombination>(ragCombinations)('rag', async (combination: RAGCombination) => {
-        console.log(combination)
         const embeddings: EmbeddingsInfo = combination.embeddings()
         const llm: LLM = combination.llm() as LLM
         const vectorStore: VectorStore = await combination.vectorStore(embeddings)
@@ -102,7 +129,7 @@ describe("RAG pipeline compatibility", () => {
 
         await vectorStore.addDocuments(sampleData.map((content, idx) => new Document({
             pageContent: content,
-            metadata: {}
+            metadata: {"id": randomUUID()}
         })), {})
         const prompt =
             PromptTemplate.fromTemplate(`
@@ -127,7 +154,7 @@ I'm not sure." Don't try to make up an answer.
 
 Anything between the following "context" html blocks is retrieved from a knowledge 
 bank, not part of the conversation with the user. 
-<<context>
+<context>
     {context} 
 <context/>
 
@@ -137,9 +164,11 @@ html blocks is retrieved from a knowledge bank, not part of the conversation wit
 user.`);
 
         const docParser = (docs: Document[]) => {
-            return docs.map((doc, i) => {
+            const formatted =  docs.map((doc, i) => {
                 return `<doc id='${i}'>${doc.pageContent}</doc>`
             }).join("\n")
+            console.log("Formatted docs: ", formatted)
+            return formatted
         }
 
         const chain = RunnableSequence.from([

@@ -1,4 +1,3 @@
-import {expect, test} from '@jest/globals';
 import {getVectorStoreHandler} from '../config';
 import {AstraDBVectorStore, AstraLibArgs} from "@langchain/community/vectorstores/astradb";
 import {FakeEmbeddings} from "@langchain/core/utils/testing";
