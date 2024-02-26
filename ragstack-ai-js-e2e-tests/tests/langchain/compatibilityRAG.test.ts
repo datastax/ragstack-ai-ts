@@ -155,10 +155,6 @@ user.`);
         const result = await chain.invoke("When was released MyFakeProductForTesting for the first time ?");
         console.log(result);
         expect(result).toContain("June 2020")
-
-        console.log(result);
-
-
     });
 
 
