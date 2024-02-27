@@ -30,7 +30,7 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
     constructor() {
         this.token = getRequiredEnv("ASTRA_DB_TOKEN")
         this.endpoint = getRequiredEnv("ASTRA_DB_ENDPOINT")
-        const env = (process.env["ASTRA_DB_ENV"] || "prod").lower()
+        const env = (process.env["ASTRA_DB_ENV"] || "prod").toLowerCase()
         this.bundleUrlTemplate = env !== "prod" ? "https://api.dev.cloud.datastax.com/v2/databases/{database_id}/secureBundleURL" : undefined
     }
 
