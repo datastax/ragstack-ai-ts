@@ -33,6 +33,10 @@ if (vectorDatabaseType === "local-cassandra") {
 export function getVectorStoreHandler(): VectorStoreHandler {
     return vectorStoreHandler
 }
+export function getVectorDatabaseType(): string {
+    return vectorDatabaseType
+
+}
 
 
 export class SkipTest extends Error {

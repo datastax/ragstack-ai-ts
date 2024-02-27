@@ -122,6 +122,9 @@ export class LocalCassandraVectorStoreHandler implements VectorStoreHandler {
     cassandraPort: number = 9042;
 
     async afterTest(): Promise<void> {
+        if (this.client) {
+            await this.client.shutdown()
+        }
     }
 
     async beforeTest(): Promise<void> {
