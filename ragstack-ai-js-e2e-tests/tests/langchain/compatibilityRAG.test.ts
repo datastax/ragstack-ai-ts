@@ -101,7 +101,6 @@ describe("RAG pipeline compatibility", () => {
         }
     }
 
-    // let vectorStores: Array<VectorStoreSupplier> = [astraDB()]
     let vectorStores: Array<VectorStoreSupplier> = [astraDB(), cassandra()]
     let embeddingsLLM: Array<EmbeddingsLLMPair> = [
         new EmbeddingsLLMPair(openAIEmbeddings(), openAILLM())
