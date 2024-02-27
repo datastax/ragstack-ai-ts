@@ -1,7 +1,7 @@
-import {getRequiredEnv, getVectorDatabaseType, getVectorStoreHandler, RequiredEnvNotSet} from '../config';
+import {getRequiredEnv, getVectorStoreHandler} from '../config';
 import {AstraDBVectorStore, AstraLibArgs} from "@langchain/community/vectorstores/astradb";
 import {Document} from "@langchain/core/documents";
-import {interpolateFString, PromptTemplate} from "@langchain/core/prompts";
+import {PromptTemplate} from "@langchain/core/prompts";
 import {RunnablePassthrough, RunnableSequence} from "@langchain/core/runnables";
 import {StringOutputParser} from "@langchain/core/output_parsers";
 import {VectorStore} from "@langchain/core/vectorstores";
@@ -13,8 +13,6 @@ import {CassandraLibArgs, CassandraStore} from "@langchain/community/vectorstore
 import {expect} from "@jest/globals";
 import {randomUUID} from "node:crypto";
 import {VectorDatabaseTypeNotSupported} from "../vectorStore";
-import {graph} from "cassandra-driver/lib/datastax/graph";
-import key = graph.t.key;
 
 describe("RAG pipeline compatibility", () => {
 
@@ -253,6 +251,7 @@ describe("RAG pipeline compatibility", () => {
         }
     }
     if (ragCombinationsToSkip.length) {
+        // eslint-disable-next-line
         test.skip.each<RAGCombination>(ragCombinationsToSkip)('Test %s', (combination: RAGCombination) => {
         });
     }
