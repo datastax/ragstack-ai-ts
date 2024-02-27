@@ -24,14 +24,17 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
 
     token: string;
     endpoint: string;
+    databaseId: string;
     collectionName: string | undefined;
     bundleUrlTemplate: string | undefined;
 
     constructor() {
         this.token = getRequiredEnv("ASTRA_DB_TOKEN")
         this.endpoint = getRequiredEnv("ASTRA_DB_ENDPOINT")
+        this.databaseId = getRequiredEnv("ASTRA_DB_ID")
         const env = (process.env["ASTRA_DB_ENV"] || "prod").toLowerCase()
         this.bundleUrlTemplate = env !== "prod" ? "https://api.dev.cloud.datastax.com/v2/databases/{database_id}/secureBundleURL" : undefined
+
     }
 
     async afterTest(): Promise<void> {
@@ -72,6 +75,7 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
                 astra: {
                     token: this.token,
                     endpoint: this.endpoint,
+                    datacenterID: this.databaseId,
                     bundleUrlTemplate: this.bundleUrlTemplate
                 },
             },
