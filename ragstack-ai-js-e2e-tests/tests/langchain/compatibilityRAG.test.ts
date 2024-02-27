@@ -17,6 +17,7 @@ describe("RAG pipeline compatibility", () => {
     class EmbeddingsInfo {
         public embeddings: EmbeddingsInterface;
         public dimensions: number;
+
         constructor(embeddings: EmbeddingsInterface, dimensions: number) {
             this.embeddings = embeddings
             this.dimensions = dimensions
@@ -27,15 +28,18 @@ describe("RAG pipeline compatibility", () => {
 
     interface VectorStoreSupplier {
         initialize(embeddingsInfo: EmbeddingsInfo): Promise<VectorStore>;
+
         close(): Promise<void>;
 
     }
+
     type LLMSupplier = () => BaseLanguageModel;
 
     class RAGCombination {
         vectorStore: VectorStoreSupplier;
         embeddings: EmbeddingsInfoSupplier;
         llm: LLMSupplier;
+
         constructor(vectorStore: VectorStoreSupplier, embeddings: EmbeddingsInfoSupplier, llm: LLMSupplier) {
             this.vectorStore = vectorStore
             this.embeddings = embeddings
@@ -78,7 +82,7 @@ describe("RAG pipeline compatibility", () => {
                 await getVectorStoreHandler().beforeTest()
                 const config: CassandraLibArgs = {
                     ...getVectorStoreHandler().getBaseCassandraLibArgs(embeddingsInfo.dimensions),
-                    primaryKey: [{ name: "id", type: "uuid", partition: true }],
+                    primaryKey: [{name: "id", type: "uuid", partition: true}],
                     // with metadata won't work, see https://github.com/langchain-ai/langchainjs/pull/4516
                     metadataColumns: [{name: "metadata", type: "text"}]
                 }
@@ -100,6 +104,7 @@ describe("RAG pipeline compatibility", () => {
     class EmbeddingsLLMPair {
         embeddings: EmbeddingsInfoSupplier;
         llm: LLMSupplier;
+
         constructor(embeddings: EmbeddingsInfoSupplier, llm: LLMSupplier) {
             this.embeddings = embeddings
             this.llm = llm

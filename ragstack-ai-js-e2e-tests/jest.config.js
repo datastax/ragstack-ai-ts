@@ -6,4 +6,5 @@ module.exports = {
   testTimeout: 120000,
   maxConcurrency: 1,
   setupFiles: ["dotenv/config"],
+  detectOpenHandles: true
 };

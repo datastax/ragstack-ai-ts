@@ -2,11 +2,13 @@ import {AstraDBVectorStoreHandler, LocalCassandraVectorStoreHandler, VectorStore
 
 export class RequiredEnvNotSet extends Error {
     env: string;
+
     constructor(envName: string) {
         super(`Env ${envName} is required`)
         this.env = envName
     }
 }
+
 export function getRequiredEnv(name: string): string {
     const value = process.env[name]
     if (!value) {

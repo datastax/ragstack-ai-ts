@@ -9,13 +9,12 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@datastax/ragstack-ai-js": "../ragstack-ai-js",
-    "@types/es6-shim": "^0.31.45"
+    "@datastax/ragstack-ai-js": "../ragstack-ai-js"
   },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "jest --runInBand"
+    "test": "jest"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

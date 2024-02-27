@@ -11,11 +11,12 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@datastax/astra-db-ts": "0.1.4",
-    "@langchain/community": "0.0.32",
+    "@langchain/community": "0.0.33",
     "@langchain/openai": "0.0.14",
-    "cassandra-driver": "4.7.2",
-    "langchain": "0.1.21"
+    "@langchain/core": "0.1.36",
+    "langchain": "0.1.23",
+    "@datastax/astra-db-ts": "0.1.4",
+    "cassandra-driver": "4.7.2"
   },
   "scripts": {
     "lint": "eslint .",

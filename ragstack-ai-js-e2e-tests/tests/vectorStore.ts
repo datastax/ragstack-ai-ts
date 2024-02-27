@@ -25,10 +25,13 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
     token: string;
     endpoint: string;
     collectionName: string | undefined;
+    bundleUrlTemplate: string | undefined;
 
     constructor() {
         this.token = getRequiredEnv("ASTRA_DB_TOKEN")
         this.endpoint = getRequiredEnv("ASTRA_DB_ENDPOINT")
+        const env = (process.env["ASTRA_DB_ENV"] || "prod").lower()
+        this.bundleUrlTemplate = env !== "prod" ? "https://api.dev.cloud.datastax.com/v2/databases/{database_id}/secureBundleURL" : undefined
     }
 
     async afterTest(): Promise<void> {
@@ -67,8 +70,9 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
         return {
             serviceProviderArgs: {
                 astra: {
-                    token: this.token as string,
-                    endpoint: this.endpoint as string,
+                    token: this.token,
+                    endpoint: this.endpoint,
+                    bundleUrlTemplate: this.bundleUrlTemplate
                 },
             },
             keyspace: "default_keyspace",
@@ -79,8 +83,9 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
     }
 }
 
-class CassandraContainer extends GenericContainer{
+class CassandraContainer extends GenericContainer {
     private mappedPort: number | undefined;
+
     constructor() {
         super("docker.io/stargateio/dse-next:4.0.11-b259738f492f")
         this.withExposedPorts(9042)
@@ -104,6 +109,7 @@ class CassandraContainer extends GenericContainer{
     }
 
 }
+
 export class LocalCassandraVectorStoreHandler implements VectorStoreHandler {
 
     collectionName: string | undefined;
