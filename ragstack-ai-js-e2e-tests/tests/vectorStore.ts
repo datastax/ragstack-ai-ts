@@ -5,13 +5,15 @@ import {HTTPClient} from "@datastax/astra-db-ts/dist/client";
 import {getRequiredEnv} from "./config";
 import {Client} from "cassandra-driver";
 import {GenericContainer, StartedTestContainer, Wait} from "testcontainers";
-import {StartedGenericContainer} from "testcontainers/build/generic-container/started-generic-container";
 
+
+export class VectorDatabaseTypeNotSupported extends Error {
+}
 
 export interface VectorStoreHandler {
 
-    beforeTest: () => Promise<any>;
-    afterTest: () => Promise<any>;
+    beforeTest: () => Promise<void>;
+    afterTest: () => Promise<void>;
     getBaseAstraLibArgs: () => AstraLibArgs;
     getBaseCassandraLibArgs: (dimensions: number) => CassandraLibArgs;
 
@@ -29,11 +31,11 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
         this.endpoint = getRequiredEnv("ASTRA_DB_ENDPOINT")
     }
 
-    async afterTest(): Promise<any> {
+    async afterTest(): Promise<void> {
         await this.deleteAllCollections();
     }
 
-    async beforeTest(): Promise<any> {
+    async beforeTest(): Promise<void> {
         await this.deleteAllCollections();
         this.collectionName = "documents_" + Math.random().toString(36).substring(7)
     }
@@ -42,10 +44,10 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
     private async deleteAllCollections() {
         const astraDbClient = new AstraDB(this.token, this.endpoint)
         const httpClient: HTTPClient = (Reflect.get(astraDbClient, "httpClient") as HTTPClient)
-        let apiResponse = await httpClient.executeCommand({"findCollections": {}}, null);
+        const apiResponse = await httpClient.executeCommand({"findCollections": {}}, null);
         const collections = apiResponse.status.collections
         console.log("Found collections: ", collections)
-        for (let collection of collections) {
+        for (const collection of collections) {
             console.log("Deleting collection: ", collection)
             await astraDbClient.dropCollection(collection)
         }
@@ -109,10 +111,10 @@ export class LocalCassandraVectorStoreHandler implements VectorStoreHandler {
     container: CassandraContainer | undefined;
     cassandraPort: number = 9042;
 
-    async afterTest(): Promise<any> {
+    async afterTest(): Promise<void> {
     }
 
-    async beforeTest(): Promise<any> {
+    async beforeTest(): Promise<void> {
         this.collectionName = "documents_" + Math.random().toString(36).substring(7)
 
         const shouldStartContainer = process.env["CASSANDRA_START_CONTAINER"] || "true"
@@ -146,7 +148,7 @@ export class LocalCassandraVectorStoreHandler implements VectorStoreHandler {
     }
 
     getBaseAstraLibArgs(): AstraLibArgs {
-        throw new Error("Astra not implemented in LocalCassandraVectorStoreHandler.");
+        throw new VectorDatabaseTypeNotSupported();
     }
 
 

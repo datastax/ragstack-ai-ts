@@ -1,3 +1,4 @@
+/* eslint-disable */
 const { TestEnvironment } = require("jest-environment-node");
 
 class AdjustedTestEnvironmentToSupportFloat32Array extends TestEnvironment {

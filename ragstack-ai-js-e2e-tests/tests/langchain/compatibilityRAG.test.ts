@@ -10,20 +10,10 @@ import {EmbeddingsInterface} from "@langchain/core/embeddings";
 import {ChatOpenAI, OpenAIEmbeddings} from "@langchain/openai";
 import {BaseLanguageModel} from "@langchain/core/language_models/base";
 import {CassandraLibArgs, CassandraStore} from "@langchain/community/vectorstores/cassandra";
-import {isTypedArray} from "util/types";
 import {expect} from "@jest/globals";
 import {randomUUID} from "node:crypto";
-import {CassandraChatMessageHistory} from "@langchain/community/stores/message/cassandra";
-import {AIMessage} from "@langchain/core/messages";
 
 describe("RAG pipeline compatibility", () => {
-    beforeEach(async () => {
-        await getVectorStoreHandler().beforeTest()
-    })
-    afterEach(async () => {
-        await getVectorStoreHandler().afterTest()
-    })
-
     class EmbeddingsInfo {
         public embeddings: EmbeddingsInterface;
         public dimensions: number;
@@ -35,8 +25,11 @@ describe("RAG pipeline compatibility", () => {
 
     type EmbeddingsInfoSupplier = () => EmbeddingsInfo;
 
-    type VectorStoreSupplier = (embeddingsInfo: EmbeddingsInfo) => Promise<VectorStore>;
+    interface VectorStoreSupplier {
+        initialize(embeddingsInfo: EmbeddingsInfo): Promise<VectorStore>;
+        close(): Promise<void>;
 
+    }
     type LLMSupplier = () => BaseLanguageModel;
 
     class RAGCombination {
@@ -52,33 +45,45 @@ describe("RAG pipeline compatibility", () => {
 
 
     function astraDB(): VectorStoreSupplier {
-        return async (embeddings: EmbeddingsInfo) => {
-            await getVectorStoreHandler().beforeTest()
-            const config: AstraLibArgs = {
-                ...getVectorStoreHandler().getBaseAstraLibArgs(),
-                collectionOptions: {
-                    vector: {
-                        dimension: embeddings.dimensions,
-                        metric: "cosine",
-                    },
-                },
+        return new class implements VectorStoreSupplier {
+            async close(): Promise<void> {
+                await getVectorStoreHandler().afterTest()
             }
-            let store = new AstraDBVectorStore(embeddings.embeddings, config);
-            await store.initialize()
-            return store
+
+            async initialize(embeddingsInfo: EmbeddingsInfo): Promise<VectorStore> {
+                await getVectorStoreHandler().beforeTest()
+                const config: AstraLibArgs = {
+                    ...getVectorStoreHandler().getBaseAstraLibArgs(),
+                    collectionOptions: {
+                        vector: {
+                            dimension: embeddingsInfo.dimensions,
+                            metric: "cosine",
+                        },
+                    },
+                }
+                const store = new AstraDBVectorStore(embeddingsInfo.embeddings, config);
+                await store.initialize()
+                return store
+            }
         }
     }
 
     function cassandra(): VectorStoreSupplier {
-        return async (embeddings: EmbeddingsInfo) => {
-            await getVectorStoreHandler().beforeTest()
-            const config: CassandraLibArgs = {
-                ...getVectorStoreHandler().getBaseCassandraLibArgs(embeddings.dimensions),
-                primaryKey: [{ name: "id", type: "uuid", partition: true }],
-                // with metadata won't work, see https://github.com/langchain-ai/langchainjs/pull/4516
-                metadataColumns: [{name: "metadata", type: "text"}]
+        return new class implements VectorStoreSupplier {
+            async close(): Promise<void> {
+                await getVectorStoreHandler().afterTest()
             }
-            return new CassandraStore(embeddings.embeddings, config);
+
+            async initialize(embeddingsInfo: EmbeddingsInfo): Promise<VectorStore> {
+                await getVectorStoreHandler().beforeTest()
+                const config: CassandraLibArgs = {
+                    ...getVectorStoreHandler().getBaseCassandraLibArgs(embeddingsInfo.dimensions),
+                    primaryKey: [{ name: "id", type: "uuid", partition: true }],
+                    // with metadata won't work, see https://github.com/langchain-ai/langchainjs/pull/4516
+                    metadataColumns: [{name: "metadata", type: "text"}]
+                }
+                return new CassandraStore(embeddingsInfo.embeddings, config);
+            }
         }
     }
 
@@ -101,22 +106,36 @@ describe("RAG pipeline compatibility", () => {
         }
     }
 
-    let vectorStores: Array<VectorStoreSupplier> = [astraDB(), cassandra()]
-    let embeddingsLLM: Array<EmbeddingsLLMPair> = [
+    const vectorStores: Array<VectorStoreSupplier> = [astraDB(), cassandra()]
+    const embeddingsLLM: Array<EmbeddingsLLMPair> = [
         new EmbeddingsLLMPair(openAIEmbeddings(), openAILLM())
     ]
     const ragCombinations: Array<RAGCombination> = []
-    for (let vectorStore of vectorStores) {
-        for (let embeddings of embeddingsLLM) {
+    for (const vectorStore of vectorStores) {
+        for (const embeddings of embeddingsLLM) {
             ragCombinations.push(new RAGCombination(vectorStore, embeddings.embeddings, embeddings.llm))
         }
     }
 
+
     test.each<RAGCombination>(ragCombinations)('rag', async (combination: RAGCombination) => {
         const embeddings: EmbeddingsInfo = combination.embeddings()
         const llm: LLM = combination.llm() as LLM
-        const vectorStore: VectorStore = await combination.vectorStore(embeddings)
+        const vectorStore: VectorStore = await combination.vectorStore.initialize(embeddings)
+        try {
+            await runCustomRagChain(vectorStore, llm);
+        } finally {
+            try {
+                await combination.vectorStore.close()
+            } catch (e: unknown) {
+                // swallow to not hide chain error
+                console.error("Error closing vector store", e)
+            }
+        }
+    });
 
+
+    async function runCustomRagChain(vectorStore: VectorStore, llm: LLM) {
         const retriever = vectorStore.asRetriever();
 
         const sampleData = [
@@ -126,7 +145,7 @@ describe("RAG pipeline compatibility", () => {
             "MyFakeProductForTesting first release happened in June 2020.",
         ]
 
-        await vectorStore.addDocuments(sampleData.map((content, idx) => new Document({
+        await vectorStore.addDocuments(sampleData.map((content) => new Document({
             pageContent: content,
             metadata: {"id": randomUUID()}
         })), {})
@@ -163,7 +182,7 @@ html blocks is retrieved from a knowledge bank, not part of the conversation wit
 user.`);
 
         const docParser = (docs: Document[]) => {
-            const formatted =  docs.map((doc, i) => {
+            const formatted = docs.map((doc, i) => {
                 return `<doc id='${i}'>${doc.pageContent}</doc>`
             }).join("\n")
             console.log("Formatted docs: ", formatted)
@@ -183,7 +202,7 @@ user.`);
         const result = await chain.invoke("When was released MyFakeProductForTesting for the first time ?");
         console.log(result);
         expect(result).toContain("June 2020")
-    });
+    }
 
 
 });

@@ -1,11 +1,16 @@
 import {AstraDBVectorStoreHandler, LocalCassandraVectorStoreHandler, VectorStoreHandler} from "./vectorStore";
-import 'dotenv/config'
-require('dotenv').config()
 
+export class RequiredEnvNotSet extends Error {
+    env: string;
+    constructor(envName: string) {
+        super(`Env ${envName} is required`)
+        this.env = envName
+    }
+}
 export function getRequiredEnv(name: string): string {
     const value = process.env[name]
     if (!value) {
-        throw new Error(`Env ${name} is required`)
+        throw new RequiredEnvNotSet(name)
     }
     return value
 
@@ -25,6 +30,28 @@ if (vectorDatabaseType === "local-cassandra") {
 
 export function getVectorStoreHandler(): VectorStoreHandler {
     return vectorStoreHandler
+}
+
+
+export class SkipTest extends Error {
+}
+
+export function testIf(evalCondition: () => boolean) {
+    let skipTest: boolean
+    try {
+        skipTest = evalCondition();
+    } catch (e: unknown) {
+        if (e instanceof SkipTest) {
+            skipTest = true
+        } else {
+            throw e
+        }
+    }
+    if (skipTest) {
+        return test.skip
+    } else {
+        return test
+    }
 }
 
 function onBeforeEach() {

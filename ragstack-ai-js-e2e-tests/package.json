@@ -13,9 +13,9 @@
     "@types/es6-shim": "^0.31.45"
   },
   "scripts": {
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
-    "test": "jest"
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "test": "jest --runInBand"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
