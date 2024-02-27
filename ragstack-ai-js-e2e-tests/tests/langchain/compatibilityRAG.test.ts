@@ -211,7 +211,7 @@ describe("RAG pipeline compatibility", () => {
                 return "openai";
             }
             getLLM(): BaseLanguageModel {
-                return new ChatOpenAI({openAIApiKey: this.getKey("OPEN_AI_KEY")})
+                return new ChatOpenAI({openAIApiKey: this.getKey("OPEN_AI_KEY"), temperature: 0.7})
             }
         }
     }
