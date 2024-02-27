@@ -158,7 +158,7 @@ export class LocalCassandraVectorStoreHandler implements VectorStoreHandler {
     }
 
     getBaseAstraLibArgs(): AstraLibArgs {
-        throw new VectorDatabaseTypeNotSupported();
+        throw new VectorDatabaseTypeNotSupported("AstraDB not supported by LocalCassandraVectorStoreHandler.");
     }
 
 

@@ -55,19 +55,22 @@ describe("RAG pipeline compatibility", () => {
             }
 
             async initialize(embeddingsInfo: EmbeddingsInfo): Promise<VectorStore> {
-                await getVectorStoreHandler().beforeTest()
-                const config: AstraLibArgs = {
-                    ...getVectorStoreHandler().getBaseAstraLibArgs(),
-                    collectionOptions: {
-                        vector: {
-                            dimension: embeddingsInfo.dimensions,
-                            metric: "cosine",
-                        },
-                    },
-                }
-                const store = new AstraDBVectorStore(embeddingsInfo.embeddings, config);
-                await store.initialize()
-                return store
+                return getVectorStoreHandler().beforeTest()
+                    .then(async () => {
+
+                        const config: AstraLibArgs = {
+                            ...getVectorStoreHandler().getBaseAstraLibArgs(),
+                            collectionOptions: {
+                                vector: {
+                                    dimension: embeddingsInfo.dimensions,
+                                    metric: "cosine",
+                                },
+                            },
+                        }
+                        const store = new AstraDBVectorStore(embeddingsInfo.embeddings, config);
+                        return store.initialize()
+                            .then(() => store)
+                    })
             }
         }
     }

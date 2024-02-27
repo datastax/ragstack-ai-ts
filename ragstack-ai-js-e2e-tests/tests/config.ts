@@ -18,7 +18,7 @@ export function getRequiredEnv(name: string): string {
 
 }
 
-const vectorDatabaseType = process.env["VECTOR_DATABASE_TYPE"] || "astradb"
+const vectorDatabaseType = process.env["VECTOR_DATABASE_TYPE"] || "local-cassandra"
 if (!["astradb", "local-cassandra"].includes(vectorDatabaseType)) {
     throw new Error(`Invalid VECTOR_DATABASE_TYPE: ${vectorDatabaseType}`)
 
