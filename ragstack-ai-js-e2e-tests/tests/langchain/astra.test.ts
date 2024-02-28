@@ -202,8 +202,7 @@ describe("Astra tests", () => {
     });
 
 
-    const t = test
-    testIf(() => true)("delete", async () => {
+    testIf(ifSupported)("delete", async () => {
         const fakeEmbeddings = new FakeEmbeddings();
         const config = {
             ...getVectorStoreHandler().getBaseAstraLibArgs(),
