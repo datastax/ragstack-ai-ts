@@ -85,17 +85,11 @@ describe("RAG pipeline compatibility", () => {
             }
 
             async initialize(embeddingsInfo: EmbeddingsInfoSupplier): Promise<VectorStore> {
-                let libArgs: AstraLibArgs
-                try {
-                    libArgs = getVectorStoreHandler().getBaseAstraLibArgs();
-                } catch (e: unknown) {
-                    return Promise.reject(e)
-                }
                 return getVectorStoreHandler().beforeTest()
                     .then(async () => {
 
                         const config: AstraLibArgs = {
-                            ...libArgs,
+                            ...getVectorStoreHandler().getBaseAstraLibArgs(),
                             collectionOptions: {
                                 vector: {
                                     dimension: embeddingsInfo.getDimensions(),
