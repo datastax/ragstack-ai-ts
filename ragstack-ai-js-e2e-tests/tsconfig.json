@@ -1,14 +1,33 @@
 {
+  "extends": "@tsconfig/recommended",
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "lib": ["es6"],
-    "allowJs": true,
-    "outDir": "build",
-    "rootDir": "tests",
-    "strict": true,
+    "outDir": "../dist",
+    "rootDir": "./src",
+    "target": "ES2021",
+    "lib": [
+      "ES2021",
+      "ES2022.Object",
+      "DOM"
+    ],
+    "module": "ES2020",
+    "moduleResolution": "nodenext",
     "esModuleInterop": true,
-    "types": ["node", "jest"],
-    "skipLibCheck": true
-  }
+    "declaration": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+//    "noUnusedLocals": true,
+//    "noUnusedParameters": true,
+    "useDefineForClassFields": true,
+    "strictPropertyInitialization": false,
+    "allowJs": true,
+    "strict": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "docs"
+  ]
 }

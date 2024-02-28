@@ -1,28 +1,37 @@
-import {expect, test} from '@jest/globals';
-import {getVectorStoreHandler} from '../config';
+import {getVectorStoreHandler, testIf} from '../config';
 import {AstraDBVectorStore, AstraLibArgs} from "@langchain/community/vectorstores/astradb";
 import {FakeEmbeddings} from "@langchain/core/utils/testing";
 import {Document} from "@langchain/core/documents";
 import {CreateCollectionOptions} from "@datastax/astra-db-ts/dist/collections/options";
+import {VectorDatabaseTypeNotSupported} from "../vectorStore";
 
 
 describe("Astra tests", () => {
+    let isSupported: boolean = true
     beforeEach(async () => {
-        await getVectorStoreHandler().beforeTest()
+        isSupported = true
+        try {
+            await getVectorStoreHandler().beforeTest()
+        } catch (e: unknown) {
+            if (e instanceof VectorDatabaseTypeNotSupported) {
+                isSupported = false
+            }
+        }
     })
     afterEach(async () => {
         await getVectorStoreHandler().afterTest()
     })
+    const ifSupported = () => isSupported
 
-    let fakeEmbeddingsCollectionOptions: CreateCollectionOptions = {
+    const fakeEmbeddingsCollectionOptions: CreateCollectionOptions = {
         vector: {
             dimension: 4,
             metric: "cosine",
         },
     };
-    test('basic vector search', async () => {
+    testIf(ifSupported)('basic vector search', async () => {
         let config = getVectorStoreHandler().getBaseAstraLibArgs()
-        let fakeEmbeddings = new FakeEmbeddings();
+        const fakeEmbeddings = new FakeEmbeddings();
         config = {
             ...config,
             collectionOptions: fakeEmbeddingsCollectionOptions,
@@ -44,9 +53,9 @@ describe("Astra tests", () => {
 
     });
 
-    test('ingest errors', async () => {
+    testIf(ifSupported)('ingest errors', async () => {
         let config = getVectorStoreHandler().getBaseAstraLibArgs()
-        let fakeEmbeddings = new FakeEmbeddings();
+        const fakeEmbeddings = new FakeEmbeddings();
         config = {
             ...config,
             collectionOptions: fakeEmbeddingsCollectionOptions,
@@ -60,16 +69,16 @@ describe("Astra tests", () => {
             }
             ])
             fail("Should have thrown an error")
-        } catch (e: any) {
-            expect(e.message).toContain("Zero vectors cannot be indexed or queried with cosine similarity")
+        } catch (e: unknown) {
+            expect((e as Error).message).toContain("Zero vectors cannot be indexed or queried with cosine similarity")
         }
 
 
     });
 
-    test('long texts', async () => {
+    testIf(ifSupported)('long texts', async () => {
         let config = getVectorStoreHandler().getBaseAstraLibArgs()
-        let fakeEmbeddings = new FakeEmbeddings();
+        const fakeEmbeddings = new FakeEmbeddings();
         config = {
             ...config,
             collectionOptions: fakeEmbeddingsCollectionOptions,
@@ -82,16 +91,16 @@ describe("Astra tests", () => {
             veryLongText = "Really long text".repeat(1000)
             await vectorStore.addDocuments([{pageContent: veryLongText, metadata: {}}])
             fail("Should have thrown an error")
-        } catch (e: any) {
-            expect(e.message).toContain("Document size limitation violated")
+        } catch (e: unknown) {
+            expect((e as Error).message).toContain("Document size limitation violated")
         }
 
 
     });
 
 
-    test('wrong connection parameters', async () => {
-        let fakeEmbeddings = new FakeEmbeddings();
+    testIf(ifSupported)('wrong connection parameters', async () => {
+        const fakeEmbeddings = new FakeEmbeddings();
         let config = {
             ...getVectorStoreHandler().getBaseAstraLibArgs(),
             token: "invalid",
@@ -103,8 +112,8 @@ describe("Astra tests", () => {
         try {
             await vectorStore.addDocuments([{pageContent: "foo", metadata: {}}])
             fail("Should have thrown an error")
-        } catch (e: any) {
-            expect(e.message).toContain("getaddrinfo")
+        } catch (e: unknown) {
+            expect((e as Error).message).toContain("getaddrinfo")
         }
 
         // endpoint valid, token is not
@@ -119,21 +128,21 @@ describe("Astra tests", () => {
         try {
             await vectorStore.addDocuments([{pageContent: "foo", metadata: {}}])
             fail("Should have thrown an error")
-        } catch (e: any) {
-            expect(e.message).toContain("401")
+        } catch (e: unknown) {
+            expect((e as Error).message).toContain("401")
         }
     });
 
 
-    test('basic metadata filtering no vector', async () => {
-        let fakeEmbeddings = new FakeEmbeddings();
-        let config = {
+    testIf(ifSupported)('basic metadata filtering no vector', async () => {
+        const fakeEmbeddings = new FakeEmbeddings();
+        const config = {
             ...getVectorStoreHandler().getBaseAstraLibArgs(),
             collectionOptions: fakeEmbeddingsCollectionOptions,
         }
-        let vectorStore = new AstraDBVectorStore(fakeEmbeddings, config)
+        const vectorStore = new AstraDBVectorStore(fakeEmbeddings, config)
         await vectorStore.initialize()
-        let document: Document = {
+        const document: Document = {
             pageContent: "RAGStack is very good",
             metadata: {
                 "id": "http://mywebsite",
@@ -146,7 +155,7 @@ describe("Astra tests", () => {
         function assertDoc(result: Document) {
             expect(result.metadata._id).not.toBeNull()
             expect(result.metadata.$vector).not.toBeNull()
-            for (let key in document.metadata) {
+            for (const key in document.metadata) {
                 expect(result.metadata[key]).toBe(document.metadata[key])
             }
         }
@@ -167,9 +176,9 @@ describe("Astra tests", () => {
         assertDoc(docs[0])
 
         try {
-            docs = await vectorStore.similaritySearch("RAGStack", 1, {"$vector": [0.1]})
-        } catch (e: any) {
-            expect(e.message).toContain("INVALID_FILTER_EXPRESSION")
+            await vectorStore.similaritySearch("RAGStack", 1, {"$vector": [0.1]})
+        } catch (e: unknown) {
+            expect((e as Error).message).toContain("INVALID_FILTER_EXPRESSION")
         }
 
         docs = await vectorStore.maxMarginalRelevanceSearch("RAGStack", {k: 1, filter: {"name": "Homepage"}})
@@ -179,16 +188,16 @@ describe("Astra tests", () => {
         docs = await vectorStore.maxMarginalRelevanceSearch("RAGStack", {k: 1, filter: {"name": "another"}})
         expect(docs.length).toBe(0)
 
-        let retriever = vectorStore.asRetriever();
+        const retriever = vectorStore.asRetriever();
         docs = await retriever.getRelevantDocuments("RAGStack")
         expect(docs.length).toBe(1)
         assertDoc(docs[0])
     });
 
 
-    test("delete", async () => {
-        let fakeEmbeddings = new FakeEmbeddings();
-        let config = {
+    testIf(ifSupported)("delete", async () => {
+        const fakeEmbeddings = new FakeEmbeddings();
+        const config = {
             ...getVectorStoreHandler().getBaseAstraLibArgs(),
             collectionOptions: fakeEmbeddingsCollectionOptions,
         }
@@ -212,7 +221,7 @@ describe("Astra tests", () => {
         const results2 = await store.similaritySearch("Apache Cassandra", 3);
 
         expect(results2.length).toEqual(2);
-        for (let result of results2) {
+        for (const result of results2) {
             expect(result.pageContent).not.toBe("AstraDB is built on Apache Cassandra");
             expect(result.metadata["id"]).not.toBe(123);
         }

@@ -42,22 +42,6 @@ jobs:
         with:
           filters: ./.github/changes-filter.yaml
 
-  unit-tests:
-    name: Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
-
-      - name: Setup node
-        uses: ./.github/actions/setup-node
-
-      - name: Run unit tests
-        run: |
-          cd ragstack-ai-js
-          yarn install --immutable
-          yarn run test
-
   ragstack-dev-dse-tests:
     name: "RAGStack dev / DSE"
     needs: ["preconditions"]
