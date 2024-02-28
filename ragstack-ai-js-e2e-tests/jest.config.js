@@ -8,7 +8,7 @@ module.exports = {
     setupFiles: ["dotenv/config"],
     detectOpenHandles: true,
     reporters: ["default",
-        ["<rootDir>/jest-reporter.js", {}],
+        ["<rootDir>/jest.reporter.js", {}],
         ["jest-junit", {
         suiteName: "RAGStack CI",
         classNameTemplate: "{title}",
