@@ -138,3 +138,6 @@ ragstack-ai-js/yarn.lock
 package-lock.json
 
 junit.xml
+
+failed-tests-report.txt
+all-tests-report.txt

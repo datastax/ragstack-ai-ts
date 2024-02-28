@@ -107,11 +107,13 @@ jobs:
             exit 1
           fi
 
-#      - name: Dump report on Github Summary
-#        if: ${{ always() }}
-#        uses: ./.github/actions/add-report-to-github-summary
+      - name: Dump report on Github Summary
+        if: ${{ always() }}
+        uses: ./.github/actions/add-report-to-github-summary
+        with:
+          tests-path: "ragstack-ai-js-e2e-tests"
 
-#      - name: Compute info
+      #      - name: Compute info
 #        if: ${{ always() }}
 #        id: info
 #        run: |
@@ -134,15 +136,15 @@ jobs:
 #            echo "commit-url=https://pypi.org/project/ragstack-ai/${ragstack_version}" >> $GITHUB_OUTPUT
 #          fi
 #
-#      - name: Slack deploy report
-#        if: ${{ always() && inputs.deploy-to-slack }}
-#        uses: ./.github/actions/deploy-slack-report
-#        with:
-#          from-report-file: "ragstack-e2e-tests/failed-tests-report.txt"
-#          type: "${{ inputs.title }}"
-#          outcome: ${{ steps.e2e-tests.outcome }}
-#          commit-url: "${{ steps.info.outputs.commit-url }}"
-#          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Slack deploy report
+        if: ${{ always() && inputs.deploy-to-slack }}
+        uses: ./.github/actions/deploy-slack-report
+        with:
+          from-report-file: "ragstack-ai-js-e2e-tests/failed-tests-report.txt"
+          type: "${{ inputs.title }}"
+          outcome: ${{ steps.e2e-tests.outcome }}
+          commit-url: "${{ steps.info.outputs.commit-url }}"
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 #      - name: Testspace deploy report
 #        uses: ./.github/actions/deploy-testspace-report

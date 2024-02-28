@@ -53,7 +53,8 @@ jobs:
       suite-name: "ragstack"
       astradb: false
       vector-database-type: "local-cassandra"
-      deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
+      #deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
+      deploy-to-slack: true
       deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
       testspace-space: "RAGStack test suite - RAGStack dev - DSE"
 
