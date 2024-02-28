@@ -42,20 +42,22 @@ export function getVectorDatabaseType(): string {
 export class SkipTest extends Error {
 }
 
-export function testIf(evalCondition: () => boolean) {
-    let skipTest: boolean
+export function testIf(evalCondition: () => boolean): jest.It {
+    let runTest: boolean
     try {
-        skipTest = evalCondition();
+        runTest = evalCondition();
     } catch (e: unknown) {
         if (e instanceof SkipTest) {
-            skipTest = true
+            runTest = false
         } else {
             throw e
         }
     }
-    if (skipTest) {
+    if (!runTest) {
+        console.log("skipping test")
         return test.skip
     } else {
+        console.log("exec test")
         return test
     }
 }
