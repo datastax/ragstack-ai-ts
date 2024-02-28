@@ -132,14 +132,14 @@ jobs:
           commit-url: "${{ steps.info.outputs.commit-url }}"
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-#      - name: Testspace deploy report
-#        uses: ./.github/actions/deploy-testspace-report
-#        if: ${{ always() && inputs.deploy-to-testspace }}
-#        with:
-#          report-type: tests
-#          token: ${{ secrets.TESTSPACE_TOKEN }}
-#          report-file: ragstack-e2e-tests/results.xml
-#          space: ${{ inputs.testspace-space }}
+      - name: Testspace deploy report
+        uses: ./.github/actions/deploy-testspace-report
+        if: ${{ always() && inputs.deploy-to-testspace }}
+        with:
+          report-type: tests
+          token: ${{ secrets.TESTSPACE_TOKEN }}
+          report-file: ragstack-ai-js-e2e-tests/junit.xml
+          space: ${{ inputs.testspace-space }}
 
       - name: Cleanup AstraDB
         uses: ./.github/actions/cleanup-astra-db
