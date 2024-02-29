@@ -10,13 +10,21 @@ class CustomReporter {
         this.tests = []
     }
 
+    onTestResult(test, testResult) {
+        if (testResult.numPendingTests > 0) {
+            testResult.testResults.forEach(result => {
+                    if (result.status === 'pending') {
+                        const fullName = this.generateTestNameForReport(test.path, result.title);
+                        this.tests.push({name: fullName, status: "skipped", failure: ""})
+                    }
+                }
+            )
+        }
+    }
+
+
     onTestCaseResult(test, testCaseResult) {
-        const parsedPath = path.parse(test.path);
-        const parts = parsedPath.dir.split("/").filter(part => part !== "tests");
-        const name = parsedPath.name
-            .replace(".test", "")
-            .replace(".ts", "");
-        const fullName = `${parts[parts.length - 1]}::${name}::${testCaseResult.title}`
+        const fullName = this.generateTestNameForReport(test.path, testCaseResult.title);
         let failure = ""
         if (testCaseResult.failureMessages.length > 0) {
             failure = testCaseResult.failureMessages[0].split("\n")[0]
@@ -24,9 +32,18 @@ class CustomReporter {
         this.tests.push({name: fullName, status: testCaseResult.status, failure: failure})
     }
 
+    generateTestNameForReport(testPath, title) {
+        const parsedPath = path.parse(testPath);
+        const parts = parsedPath.dir.split("/").filter(part => part !== "tests");
+        const name = parsedPath.name
+            .replace(".test", "")
+            .replace(".ts", "");
+        return `${parts[parts.length - 1]}::${name}::${title}`
+    }
+
     onRunComplete(testContexts, results) {
-        console.log("Done!", this.tests)
         const all = this.tests.map(test => this.formatTestLine(test)).join("\n")
+        console.log("Test report:")
         console.log(all)
         const failed = this.tests.filter(test => test.status === "failed").map(this.formatTestLine).join("\n")
         fs.writeFileSync("all-tests-report.txt", all)

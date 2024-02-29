@@ -7,22 +7,23 @@ import {VectorDatabaseTypeNotSupported} from "../vectorStore";
 
 describe("Astra tests", () => {
     let supported: boolean = true
+    try {
+        getVectorStoreHandler().getBaseAstraLibArgs()
+    } catch (e: unknown) {
+        if (e instanceof VectorDatabaseTypeNotSupported) {
+            supported = false
+        } else {
+            throw e
+        }
+    }
+    const ifSupported = () => supported
+
     beforeEach(async () => {
         await getVectorStoreHandler().beforeTest()
-        try {
-            getVectorStoreHandler().getBaseAstraLibArgs()
-        } catch (e: unknown) {
-            if (e instanceof VectorDatabaseTypeNotSupported) {
-                supported = false
-            } else {
-                throw e
-            }
-        }
     })
     afterEach(async () => {
         await getVectorStoreHandler().afterTest()
     })
-    const ifSupported = () => supported
 
     const fakeEmbeddingsCollectionOptions: CreateCollectionOptions = {
         vector: {
