@@ -5,23 +5,25 @@ import {Document} from "@langchain/core/documents";
 import {CreateCollectionOptions} from "@datastax/astra-db-ts/dist/collections/options";
 import {VectorDatabaseTypeNotSupported} from "../vectorStore";
 
-
 describe("Astra tests", () => {
-    let isSupported: boolean = true
-    beforeEach(async () => {
-        isSupported = true
-        try {
-            await getVectorStoreHandler().beforeTest()
-        } catch (e: unknown) {
-            if (e instanceof VectorDatabaseTypeNotSupported) {
-                isSupported = false
-            }
+    let supported: boolean = true
+    try {
+        getVectorStoreHandler().getBaseAstraLibArgs()
+    } catch (e: unknown) {
+        if (e instanceof VectorDatabaseTypeNotSupported) {
+            supported = false
+        } else {
+            throw e
         }
+    }
+    const ifSupported = () => supported
+
+    beforeEach(async () => {
+        await getVectorStoreHandler().beforeTest()
     })
     afterEach(async () => {
         await getVectorStoreHandler().afterTest()
     })
-    const ifSupported = () => isSupported
 
     const fakeEmbeddingsCollectionOptions: CreateCollectionOptions = {
         vector: {
@@ -108,9 +110,8 @@ describe("Astra tests", () => {
             collectionOptions: fakeEmbeddingsCollectionOptions,
         }
         let vectorStore = new AstraDBVectorStore(fakeEmbeddings, config)
-        await vectorStore.initialize()
         try {
-            await vectorStore.addDocuments([{pageContent: "foo", metadata: {}}])
+            await vectorStore.initialize()
             fail("Should have thrown an error")
         } catch (e: unknown) {
             expect((e as Error).message).toContain("getaddrinfo")
@@ -124,9 +125,8 @@ describe("Astra tests", () => {
         }
 
         vectorStore = new AstraDBVectorStore(fakeEmbeddings, config)
-        await vectorStore.initialize()
         try {
-            await vectorStore.addDocuments([{pageContent: "foo", metadata: {}}])
+            await vectorStore.initialize()
             fail("Should have thrown an error")
         } catch (e: unknown) {
             expect((e as Error).message).toContain("401")

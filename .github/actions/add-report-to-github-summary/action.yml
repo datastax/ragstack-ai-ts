@@ -1,0 +1,25 @@
+name: "Add report to GitHub summary"
+description: "Add report to GitHub summary"
+inputs:
+  tests-path:
+    required: true
+    description: "Whether to report all tests"
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        set -e
+        write_report() {
+          local report_file=$1
+          local report_type=$2
+          if [ -f "$report_file" ]; then
+            echo "## $report_type" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "$(cat $report_file)" >> $GITHUB_STEP_SUMMARY
+            echo "Report $report_type added to the summary"
+          else
+            echo "Report $report_type not found"
+          fi
+        }
+        write_report ${{ inputs.tests-path }}/all-tests-report.txt "All tests"

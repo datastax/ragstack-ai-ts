@@ -7,7 +7,13 @@ module.exports = {
     maxConcurrency: 1,
     setupFiles: ["dotenv/config"],
     detectOpenHandles: true,
-    reporters: [ "default",["jest-junit", { suiteName: "RAGStack CI", classNameTemplate: "{title}", titleTemplate: "{title}"}]
+    reporters: ["default",
+        ["<rootDir>/jest.reporter.js", {}],
+        ["jest-junit", {
+        suiteName: "RAGStack CI",
+        classNameTemplate: "{classname}",
+        titleTemplate: "{title}"
+    }]
     ]
 }
 ;

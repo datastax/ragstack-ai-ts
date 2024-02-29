@@ -33,52 +33,23 @@ if (vectorDatabaseType === "local-cassandra") {
 export function getVectorStoreHandler(): VectorStoreHandler {
     return vectorStoreHandler
 }
-export function getVectorDatabaseType(): string {
-    return vectorDatabaseType
-
-}
-
-
 export class SkipTest extends Error {
 }
 
-export function testIf(evalCondition: () => boolean) {
-    let skipTest: boolean
+export function testIf(evalCondition: () => boolean): jest.It {
+    let runTest: boolean
     try {
-        skipTest = evalCondition();
+        runTest = evalCondition();
     } catch (e: unknown) {
         if (e instanceof SkipTest) {
-            skipTest = true
+            runTest = false
         } else {
             throw e
         }
     }
-    if (skipTest) {
+    if (!runTest) {
         return test.skip
     } else {
         return test
     }
 }
-
-function onBeforeEach() {
-}
-
-
-function onAfterEach() {
-}
-
-
-function onBeforeAll() {
-}
-
-function onAfterAll() {
-}
-
-export function setupBeforeAndAfter() {
-    beforeAll(onBeforeAll);
-    afterAll(onAfterAll);
-    beforeEach(onBeforeEach);
-    afterEach(onAfterEach);
-}
-
-
