@@ -5,7 +5,6 @@ import {randomUUID} from "node:crypto";
 import {PromptTemplate} from "@langchain/core/prompts";
 import {RunnablePassthrough, RunnableSequence} from "@langchain/core/runnables";
 import {StringOutputParser} from "@langchain/core/output_parsers";
-import {expect} from "@jest/globals";
 import {ConversationalRetrievalQAChain} from "langchain/chains";
 import {BaseListChatMessageHistory} from "@langchain/core/chat_history";
 import {BufferMemory} from "langchain/memory";
@@ -103,7 +102,9 @@ export async function runConversationalRag(vectorStore: VectorStore, llm: LLM, h
 
     result = await chain.invoke({"question": "and when was it released?"})
     console.log(result);
-    expect(result["text"]).toContain("2020")
+    const text = result['text'];
+    // @ts-ignore
+    expect(text, `Expected to contain 2020 but got: ${text}`).toContain("2020")
 
 
 

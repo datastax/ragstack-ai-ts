@@ -4,4 +4,12 @@ module.exports = {
     plugins: ['@typescript-eslint'],
     root: true,
     ignorePatterns: ['jest*js'],
+    rules: {
+        "jest/valid-expect": [
+            "error",
+            {
+                "maxArgs": 2
+            }
+        ]
+    }
 };

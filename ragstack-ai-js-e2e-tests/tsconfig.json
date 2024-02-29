@@ -19,7 +19,6 @@
 //    "noUnusedParameters": true,
     "useDefineForClassFields": true,
     "strictPropertyInitialization": false,
-    "allowJs": true,
     "strict": true
   },
   "include": [
@@ -29,5 +28,6 @@
     "node_modules",
     "dist",
     "docs"
-  ]
+  ],
+  "files": ["node_modules/jest-expect-message/types/index.d.ts"]
 }

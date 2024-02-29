@@ -177,6 +177,7 @@ describe("Astra tests", () => {
 
         try {
             await vectorStore.similaritySearch("RAGStack", 1, {"$vector": [0.1]})
+            fail("Should have thrown an error")
         } catch (e: unknown) {
             expect((e as Error).message).toContain("INVALID_FILTER_EXPRESSION")
         }
