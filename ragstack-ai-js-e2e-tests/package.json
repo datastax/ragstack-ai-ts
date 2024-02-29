@@ -38,6 +38,7 @@
     "@langchain/community": "^0.0.32",
     "@langchain/core": "^0.1.32",
     "@langchain/openai": "^0.0.14",
+    "langchain": "^0.1.23",
     "cassandra-driver": "^4.7.2"
   }
 }

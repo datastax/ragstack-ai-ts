@@ -51,6 +51,7 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
         const astraDbClient = new AstraDB(this.token, this.endpoint)
         const httpClient: HTTPClient = (Reflect.get(astraDbClient, "httpClient") as HTTPClient)
         const apiResponse = await httpClient.executeCommand({"findCollections": {}}, null);
+        console.log("API response: ", apiResponse)
         const collections = apiResponse.status.collections
         console.log("Found collections: ", collections)
         for (const collection of collections) {

@@ -1,18 +1,18 @@
 import {getRequiredEnv, getVectorStoreHandler} from '../config';
 import {AstraDBVectorStore, AstraLibArgs} from "@langchain/community/vectorstores/astradb";
-import {Document} from "@langchain/core/documents";
-import {PromptTemplate} from "@langchain/core/prompts";
-import {RunnablePassthrough, RunnableSequence} from "@langchain/core/runnables";
-import {StringOutputParser} from "@langchain/core/output_parsers";
 import {VectorStore} from "@langchain/core/vectorstores";
 import {LLM} from "@langchain/core/language_models/llms";
 import {EmbeddingsInterface} from "@langchain/core/embeddings";
 import {ChatOpenAI, OpenAIEmbeddings} from "@langchain/openai";
 import {BaseLanguageModel} from "@langchain/core/language_models/base";
 import {CassandraLibArgs, CassandraStore} from "@langchain/community/vectorstores/cassandra";
-import {expect} from "@jest/globals";
 import {randomUUID} from "node:crypto";
 import {VectorDatabaseTypeNotSupported} from "../vectorStore";
+import {runConversationalRag, runCustomRagChain} from "./RAGApplications";
+import {BaseListChatMessageHistory} from "@langchain/core/chat_history";
+import {AstraDBChatMessageHistory} from "@langchain/community/stores/message/astradb";
+import {CassandraChatMessageHistory} from "@langchain/community/stores/message/cassandra";
+import {AstraDB} from "@datastax/astra-db-ts";
 
 describe("RAG pipeline compatibility", () => {
 
@@ -38,6 +38,8 @@ describe("RAG pipeline compatibility", () => {
     interface VectorStoreSupplier extends Skippable, Nameable {
 
         initialize(embeddingsInfo: EmbeddingsInfoSupplier): Promise<VectorStore>;
+
+        newChatHistory(): Promise<BaseListChatMessageHistory>;
 
         close(): Promise<void>;
 
@@ -67,6 +69,7 @@ describe("RAG pipeline compatibility", () => {
             name(): string {
                 return "astradb";
             }
+
             skip(): boolean {
                 try {
                     getVectorStoreHandler().getBaseAstraLibArgs();
@@ -102,15 +105,36 @@ describe("RAG pipeline compatibility", () => {
                             .then(() => store)
                     })
             }
+
+            async newChatHistory(): Promise<BaseListChatMessageHistory> {
+                const baseAstraLibArgs = getVectorStoreHandler().getBaseAstraLibArgs();
+                const client = new AstraDB(
+                    baseAstraLibArgs.token,
+                    baseAstraLibArgs.endpoint
+                );
+                const collectionName = baseAstraLibArgs.collection + "_chat_history";
+                await client.createCollection(collectionName)
+                const collection = await client.collection(collectionName)
+                const history = new AstraDBChatMessageHistory(
+                    {
+                        collection,
+                        sessionId: randomUUID()
+                    }
+                );
+                return Promise.resolve(history)
+            }
+
         }
     }
 
     function cassandra(): VectorStoreSupplier {
         return new class implements VectorStoreSupplier {
             store?: CassandraStore
+
             name(): string {
                 return "cassandra";
             }
+
             skip(): boolean {
 
                 try {
@@ -144,6 +168,21 @@ describe("RAG pipeline compatibility", () => {
                 this.store = new CassandraStore(embeddingsInfo.getEmbeddings(), config);
                 return this.store
             }
+
+            newChatHistory(): Promise<BaseListChatMessageHistory> {
+                const baseCassandraLibArgs = getVectorStoreHandler().getBaseCassandraLibArgs(0);
+                return Promise.resolve(new CassandraChatMessageHistory({
+                    serviceProviderArgs: baseCassandraLibArgs.serviceProviderArgs,
+                    contactPoints: baseCassandraLibArgs.contactPoints,
+                    localDataCenter: baseCassandraLibArgs.localDataCenter,
+                    credentials: baseCassandraLibArgs.credentials,
+                    keyspace: baseCassandraLibArgs.keyspace,
+                    table: baseCassandraLibArgs.table + "_chat_history",
+                    sessionId: randomUUID()
+                }));
+            }
+
+
         }
     }
 
@@ -181,6 +220,7 @@ describe("RAG pipeline compatibility", () => {
             constructor() {
                 super("OPEN_AI_KEY");
             }
+
             name(): string {
                 return "openai";
             }
@@ -222,7 +262,8 @@ describe("RAG pipeline compatibility", () => {
     }
 
     const testCases: string[] = [
-        "rag custom chain"
+        "rag custom chain",
+        "conversational rag"
     ]
     const vectorStores: Array<VectorStoreSupplier> = [
         astraDB(),
@@ -260,6 +301,9 @@ describe("RAG pipeline compatibility", () => {
                     case "rag custom chain":
                         await runCustomRagChain(vectorStore, llm);
                         break;
+                    case "conversational rag":
+                        await runConversationalRag(vectorStore, llm, await combination.vectorStore.newChatHistory());
+                        break;
                     default:
                         throw new Error(`Unknown test case: ${combination.testCase}`)
                 }
@@ -272,75 +316,5 @@ describe("RAG pipeline compatibility", () => {
                 }
             }
         });
-    }
-
-
-    async function runCustomRagChain(vectorStore: VectorStore, llm: LLM) {
-        const retriever = vectorStore.asRetriever();
-
-        const sampleData = [
-            "MyFakeProductForTesting is a versatile testing tool designed to streamline the testing process for software developers, quality assurance professionals, and product testers. It provides a comprehensive solution for testing various aspects of applications and systems, ensuring robust performance and functionality.",
-            "MyFakeProductForTesting comes equipped with an advanced dynamic test scenario generator. This feature allows users to create realistic test scenarios by simulating various user interactions, system inputs, and environmental conditions. The dynamic nature of the generator ensures that tests are not only diverse but also adaptive to changes in the application under test.",
-            "The product includes an intelligent bug detection and analysis module. It not only identifies bugs and issues but also provides in-depth analysis and insights into the root causes. The system utilizes machine learning algorithms to categorize and prioritize bugs, making it easier for developers and testers to address critical issues first.",
-            "MyFakeProductForTesting first release happened in June 2020.",
-        ]
-
-        await vectorStore.addDocuments(sampleData.map((content) => new Document({
-            pageContent: content,
-            metadata: {"id": randomUUID()}
-        })), {})
-        const prompt =
-            PromptTemplate.fromTemplate(`
-You are an expert programmer and problem-solver, tasked with answering any question 
-about MyFakeProductForTesting.
-
-Generate a comprehensive and informative answer of 80 words or less for the 
-given question based solely on the provided search results (URL and content). You must 
-only use information from the provided search results. Use an unbiased and 
-journalistic tone. Combine search results together into a coherent answer. Do not 
-repeat text. Cite search results using number notation. Only cite the most 
-relevant results that answer the question accurately. Place these citations at the end 
-of the sentence or paragraph that reference them - do not put them all at the end. If 
-different results refer to different entities within the same name, write separate 
-answers for each entity.
-
-You should use bullet points in your answer for readability. Put citations where they 
-apply rather than putting them all at the end.
-
-If there is nothing in the context relevant to the question at hand, just say "Hmm, 
-I'm not sure." Don't try to make up an answer.
-
-Anything between the following "context" html blocks is retrieved from a knowledge 
-bank, not part of the conversation with the user. 
-<context>
-    {context} 
-<context/>
-
-REMEMBER: If there is no relevant information within the context, just say "Hmm, I'm 
-not sure." Don't try to make up an answer. Anything between the preceding 'context' 
-html blocks is retrieved from a knowledge bank, not part of the conversation with the 
-user.`);
-
-        const docParser = (docs: Document[]) => {
-            const formatted = docs.map((doc, i) => {
-                return `<doc id='${i}'>${doc.pageContent}</doc>`
-            }).join("\n")
-            console.log("Formatted docs: ", formatted)
-            return formatted
-        }
-
-        const chain = RunnableSequence.from([
-            {
-                context: retriever.pipe(docParser),
-                question: new RunnablePassthrough(),
-            },
-            prompt,
-            llm,
-            new StringOutputParser(),
-        ]);
-
-        const result = await chain.invoke("When was released MyFakeProductForTesting for the first time ?");
-        console.log(result);
-        expect(result).toContain("June 2020")
     }
 })
