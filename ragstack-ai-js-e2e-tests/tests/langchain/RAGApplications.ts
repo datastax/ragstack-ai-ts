@@ -103,7 +103,6 @@ export async function runConversationalRag(vectorStore: VectorStore, llm: LLM, h
     result = await chain.invoke({"question": "and when was it released?"})
     console.log(result);
     const text = result['text'];
-    // @ts-ignore
     expect(text, `Expected to contain 2020 but got: ${text}`).toContain("2020")
 
 
