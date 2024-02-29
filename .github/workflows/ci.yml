@@ -1,9 +1,9 @@
 name: CI
 on:
   workflow_dispatch: {}
-  # schedule:
+  schedule:
     # astra dev and dse - every 2 hours
-    #- cron: "0 */2 * * *"
+    - cron: "0 */2 * * *"
   pull_request:
     paths-ignore:
       - "README.md"
@@ -53,10 +53,8 @@ jobs:
       suite-name: "ragstack"
       astradb: false
       vector-database-type: "local-cassandra"
-      #deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-      deploy-to-slack: true
-      #deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-      deploy-to-testspace: true
+      deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
+      deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
       testspace-space: "RAGStack test suite - RAGStack dev - DSE"
 
   ragstack-dev-astradev-tests:
@@ -74,8 +72,6 @@ jobs:
       astradb-region: "${{ needs.preconditions.outputs.astradb-dev-region }}"
       astradb-cloud: "${{ needs.preconditions.outputs.astradb-dev-cloud }}"
       vector-database-type: "astradb"
-      #deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-      deploy-to-slack: true
-      #deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-      deploy-to-testspace: true
+      deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
+      deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
       testspace-space: "RAGStack test suite - RAGStack dev - AstraDB"
