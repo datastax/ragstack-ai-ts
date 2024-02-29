@@ -11,7 +11,7 @@ module.exports = {
         ["<rootDir>/jest.reporter.js", {}],
         ["jest-junit", {
         suiteName: "RAGStack CI",
-        classNameTemplate: "{title}",
+        classNameTemplate: "{classname}",
         titleTemplate: "{title}"
     }]
     ]
