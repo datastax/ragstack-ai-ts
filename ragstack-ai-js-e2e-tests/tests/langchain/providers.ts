@@ -10,6 +10,7 @@ import {AstraDBChatMessageHistory} from "@langchain/community/stores/message/ast
 import {randomUUID} from "node:crypto";
 import {CassandraLibArgs, CassandraStore} from "@langchain/community/vectorstores/cassandra";
 import {CassandraChatMessageHistory} from "@langchain/community/stores/message/cassandra";
+import {Client} from "cassandra-driver";
 
 
 export interface Skippable {
@@ -174,7 +175,7 @@ export class AstraDBVectorStoreSupplier implements VectorStoreSupplier {
 
 export class CassandraVectorStoreSupplier implements VectorStoreSupplier {
 
-    store?: CassandraStore
+    clients: Client[] = []
 
     name(): string {
         return "cassandra";
@@ -195,11 +196,10 @@ export class CassandraVectorStoreSupplier implements VectorStoreSupplier {
 
     async close(): Promise<void> {
         await getVectorStoreHandler().afterTest()
-        if (this.store) {
-            const client = await this.store.getCassandraTable().getClient();
+        for (const client of this.clients) {
             await client.shutdown()
-            this.store = undefined
         }
+        this.clients = []
     }
 
     async initialize(embeddingsInfo: EmbeddingsInfoSupplier): Promise<VectorStore> {
@@ -210,13 +210,15 @@ export class CassandraVectorStoreSupplier implements VectorStoreSupplier {
             // with metadata won't work, see https://github.com/langchain-ai/langchainjs/pull/4516
             metadataColumns: [{name: "metadata", type: "text"}]
         }
-        this.store = new CassandraStore(embeddingsInfo.getEmbeddings(), config);
-        return this.store
+        const store = new CassandraStore(embeddingsInfo.getEmbeddings(), config);
+        const client = await store.getCassandraTable().getClient();
+        this.clients.push(client)
+        return store
     }
 
-    newChatHistory(): Promise<BaseListChatMessageHistory> {
+    async newChatHistory(): Promise<BaseListChatMessageHistory> {
         const baseCassandraLibArgs = getVectorStoreHandler().getBaseCassandraLibArgs(0);
-        return Promise.resolve(new CassandraChatMessageHistory({
+        const cassandraChatMessageHistory = new CassandraChatMessageHistory({
             serviceProviderArgs: baseCassandraLibArgs.serviceProviderArgs,
             contactPoints: baseCassandraLibArgs.contactPoints,
             localDataCenter: baseCassandraLibArgs.localDataCenter,
@@ -224,6 +226,10 @@ export class CassandraVectorStoreSupplier implements VectorStoreSupplier {
             keyspace: baseCassandraLibArgs.keyspace,
             table: baseCassandraLibArgs.table + "_chat_history",
             sessionId: randomUUID()
-        }));
+        });
+        await cassandraChatMessageHistory.clear()
+        const client = Reflect.get(cassandraChatMessageHistory, "cassandraTable").client as Client
+        this.clients.push(client)
+        return Promise.resolve(cassandraChatMessageHistory);
     }
 }

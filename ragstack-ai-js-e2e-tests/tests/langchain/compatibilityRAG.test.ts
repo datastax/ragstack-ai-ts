@@ -179,11 +179,13 @@ describe("RAG pipeline compatibility", () => {
     for (const testCase of testCases) {
         for (const vectorStore of vectorStores) {
             for (const embeddings of embeddingsLLM) {
+                const ragCombination = new RAGCombination(vectorStore, embeddings.embeddings, embeddings.llm, testCase);
                 if (vectorStore.skip() || embeddings.embeddings.skip() || embeddings.llm.skip()) {
-                    ragCombinationsToSkip.push(new RAGCombination(vectorStore, embeddings.embeddings, embeddings.llm, testCase))
+                    console.info(`Skipping test ${ragCombination}  (skip vector = ${vectorStore.skip()}, skip embeddings = ${embeddings.embeddings.skip()}, skip llm = ${embeddings.llm.skip()})`)
+                    ragCombinationsToSkip.push(ragCombination)
                     continue
                 }
-                ragCombinations.push(new RAGCombination(vectorStore, embeddings.embeddings, embeddings.llm, testCase))
+                ragCombinations.push(ragCombination)
             }
         }
     }
