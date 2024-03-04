@@ -66,7 +66,7 @@ describe("Astra tests", () => {
         await vectorStore.initialize()
         try {
             await vectorStore.addVectors([[0, 0, 0, 0]], [{
-                buffer: "",
+                pageContent: "",
                 metadata: {}
             }
             ])
@@ -88,10 +88,10 @@ describe("Astra tests", () => {
         const vectorStore = new AstraDBVectorStore(fakeEmbeddings, config)
         await vectorStore.initialize()
         let veryLongText = "Really long text".repeat(500)
-        await vectorStore.addDocuments([{buffer: veryLongText, metadata: {}}])
+        await vectorStore.addDocuments([{pageContent: veryLongText, metadata: {}}])
         try {
             veryLongText = "Really long text".repeat(1000)
-            await vectorStore.addDocuments([{buffer: veryLongText, metadata: {}}])
+            await vectorStore.addDocuments([{pageContent: veryLongText, metadata: {}}])
             fail("Should have thrown an error")
         } catch (e: unknown) {
             expect((e as Error).message).toContain("Document size limitation violated")
@@ -143,7 +143,7 @@ describe("Astra tests", () => {
         const vectorStore = new AstraDBVectorStore(fakeEmbeddings, config)
         await vectorStore.initialize()
         const document: Document = {
-            buffer: "RAGStack is very good",
+            pageContent: "RAGStack is very good",
             metadata: {
                 "id": "http://mywebsite",
                 "language": "en",

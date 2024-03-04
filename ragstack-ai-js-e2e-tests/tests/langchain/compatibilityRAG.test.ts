@@ -19,7 +19,6 @@ import {BedrockChat} from "@langchain/community/chat_models/bedrock";
 import {BedrockEmbeddings} from "@langchain/community/embeddings/bedrock";
 import {GoogleVertexAIMultimodalEmbeddings} from "langchain/experimental/multimodal_embeddings/googlevertexai";
 import * as path from "node:path";
-import {DocumentInterface} from "@langchain/core/documents";
 import { EmbeddingsInterface} from "@langchain/core/embeddings";
 import {ChatGoogleGenerativeAI} from "@langchain/google-genai";
 import {BaseLanguageModel} from "@langchain/core/language_models/base";
@@ -55,7 +54,7 @@ class ConfigurableMockEmbeddings implements EmbeddingsInterface {
     }
 
     embedDocuments(documents: string[]): Promise<number[][]> {
-        return Promise.resolve(documents.map(_ => Array(this.dimensions).fill(0)))
+        return Promise.resolve(documents.map(() => Array(this.dimensions).fill(0)))
     }
 
     embedQuery(document: string): Promise<number[]> {
@@ -320,6 +319,7 @@ describe("Multimodal RAG", () => {
 
             const llm: LLM = combination.llm.getLLM() as LLM
             const vectorStore: VectorStore = await combination.vectorStore.initialize(new class implements EmbeddingsInfoSupplier {
+                // eslint-disable-next-line
                 embedImageQuery(query: Buffer): Promise<number[]> {
                     throw new Error("Method not implemented.");
                 }
@@ -363,6 +363,7 @@ describe("Multimodal RAG", () => {
                 const imageQuery = readResourcesFile("coffee_maker_part.png");
 
                 const resultDocs = await vectorStore.similaritySearchVectorWithScore(await combination.embeddings.embedImageQuery(imageQuery), 5)
+                // eslint-disable-next-line
                 const docsStr = resultDocs.map(([doc, score]) => "'" + doc.pageContent + "'").join(",")
                 const imageQueryBase64 = imageQuery.toString('base64');
                 const textPrompt = `Tell me which one of these products it is part of. Only include product from the ones below: ${docsStr}.`;
