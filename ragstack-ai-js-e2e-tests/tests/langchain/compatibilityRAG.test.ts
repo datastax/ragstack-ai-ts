@@ -195,8 +195,6 @@ describe("RAG pipeline compatibility", () => {
     if (ragCombinations.length) {
 
         test.each<RAGCombination>(ragCombinations)('Test %s', async (combination: RAGCombination) => {
-            console.log(await combination.llm.getLLM().invoke("Hello, world!", {}))
-            // console.log(await combination.embeddings.getEmbeddings().embedQuery("Hello, world!"))
             const llm: LLM = combination.llm.getLLM() as LLM
             try {
                 const vectorStore: VectorStore = await combination.vectorStore.initialize(combination.embeddings)
