@@ -134,16 +134,16 @@ describe("RAG pipeline compatibility", () => {
             })
         })
 
-    const bedrockCohereEmbeddings = new EnvDependantEmbeddings(
-        ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "BEDROCK_AWS_REGION"],
-        "bedrock cohere",
-        1024,
-        () => {
-            return new BedrockEmbeddings({
-                model: "cohere.embed-english-v3",
-                region: getRequiredEnv("BEDROCK_AWS_REGION"),
-            })
-        })
+    // const bedrockCohereEmbeddings = new EnvDependantEmbeddings(
+    //     ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "BEDROCK_AWS_REGION"],
+    //     "bedrock cohere",
+    //     1024,
+    //     () => {
+    //         return new BedrockEmbeddings({
+    //             model: "cohere.embed-english-v3",
+    //             region: getRequiredEnv("BEDROCK_AWS_REGION"),
+    //         })
+    //     })
 
 
 
