@@ -12,13 +12,13 @@
   },
   "dependencies": {
     "@datastax/astra-db-ts": "0.1.4",
-    "@langchain/azure-openai": "^0.0.2",
+    "@langchain/azure-openai": "0.0.2",
     "@langchain/community": "0.0.33",
     "@langchain/core": "0.1.36",
     "@langchain/openai": "0.0.14",
     "cassandra-driver": "4.7.2",
     "langchain": "0.1.23",
-    "langsmith": "^0.1.8"
+    "langsmith": "0.1.8"
   },
   "scripts": {
     "lint": "eslint .",
