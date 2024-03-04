@@ -17,6 +17,51 @@ import {GoogleVertexAIEmbeddings} from "@langchain/community/embeddings/googleve
 import {ChatGoogleVertexAI} from "@langchain/community/chat_models/googlevertexai";
 import {BedrockChat} from "@langchain/community/chat_models/bedrock";
 import {BedrockEmbeddings} from "@langchain/community/embeddings/bedrock";
+import {GoogleVertexAIMultimodalEmbeddings} from "langchain/experimental/multimodal_embeddings/googlevertexai";
+import * as path from "node:path";
+import {DocumentInterface} from "@langchain/core/documents";
+import { EmbeddingsInterface} from "@langchain/core/embeddings";
+import {ChatGoogleGenerativeAI} from "@langchain/google-genai";
+import {BaseLanguageModel} from "@langchain/core/language_models/base";
+import {HumanMessage} from "@langchain/core/messages";
+import {expect} from "@jest/globals";
+import {randomUUID} from "node:crypto";
+
+
+function vertexSetup() {
+    if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+        process.env["GOOGLE_APPLICATION_CREDENTIALS"] = "/tmp/gcloud-account-key.json"
+        fs.writeFileSync("/tmp/gcloud-account-key.json", process.env["GCLOUD_ACCOUNT_KEY_JSON"] as string)
+    }
+}
+
+class EmbeddingsLLMPair {
+    embeddings: EmbeddingsInfoSupplier;
+    llm: LLMSupplier;
+
+    constructor(embeddings: EmbeddingsInfoSupplier, llm: LLMSupplier) {
+        this.embeddings = embeddings
+        this.llm = llm
+    }
+}
+
+class ConfigurableMockEmbeddings implements EmbeddingsInterface {
+
+    private readonly dimensions: number;
+
+
+    constructor(dimensions: number) {
+        this.dimensions = dimensions;
+    }
+
+    embedDocuments(documents: string[]): Promise<number[][]> {
+        return Promise.resolve(documents.map(_ => Array(this.dimensions).fill(0)))
+    }
+
+    embedQuery(document: string): Promise<number[]> {
+        return this.embedDocuments([document]).then(embeddings => embeddings[0])
+    }
+}
 
 describe("RAG pipeline compatibility", () => {
     class RAGCombination {
@@ -57,12 +102,12 @@ describe("RAG pipeline compatibility", () => {
         "azure openai",
         1536,
         () => new AzureOpenAIEmbeddings({
-        azureOpenAIApiKey: getRequiredEnv("AZURE_OPEN_AI_KEY"),
-        azureOpenAIApiVersion: "2023-05-15",
-        azureOpenAIEndpoint: getRequiredEnv("AZURE_OPEN_AI_ENDPOINT"),
-        azureOpenAIApiDeploymentName: "text-embedding-ada-002",
-        modelName: "text-embedding-ada-002"
-    }))
+            azureOpenAIApiKey: getRequiredEnv("AZURE_OPEN_AI_KEY"),
+            azureOpenAIApiVersion: "2023-05-15",
+            azureOpenAIEndpoint: getRequiredEnv("AZURE_OPEN_AI_ENDPOINT"),
+            azureOpenAIApiDeploymentName: "text-embedding-ada-002",
+            modelName: "text-embedding-ada-002"
+        }))
 
     const azureOpenAILLM = new EnvDependantLLM(
         ["AZURE_OPEN_AI_KEY", "AZURE_OPEN_AI_ENDPOINT"],
@@ -74,13 +119,6 @@ describe("RAG pipeline compatibility", () => {
             azureOpenAIApiDeploymentName: "gpt-35-turbo",
         }))
 
-
-    function vertexSetup() {
-        if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-            process.env["GOOGLE_APPLICATION_CREDENTIALS"] = "/tmp/gcloud-account-key.json"
-            fs.writeFileSync("/tmp/gcloud-account-key.json", process.env["GCLOUD_ACCOUNT_KEY_JSON"] as string)
-        }
-    }
 
     const vertexLLM = new EnvDependantLLM(
         ["GCLOUD_ACCOUNT_KEY_JSON"],
@@ -146,17 +184,6 @@ describe("RAG pipeline compatibility", () => {
     //     })
 
 
-
-    class EmbeddingsLLMPair {
-        embeddings: EmbeddingsInfoSupplier;
-        llm: LLMSupplier;
-
-        constructor(embeddings: EmbeddingsInfoSupplier, llm: LLMSupplier) {
-            this.embeddings = embeddings
-            this.llm = llm
-        }
-    }
-
     const testCases: string[] = [
         "rag custom chain",
         "conversational rag"
@@ -211,6 +238,154 @@ describe("RAG pipeline compatibility", () => {
                     default:
                         throw new Error(`Unknown test case: ${combination.testCase}`)
                 }
+            } finally {
+                try {
+                    await combination.vectorStore.close()
+                } catch (e: unknown) {
+                    // swallow to not hide chain error
+                    console.error("Error closing vector store", e)
+                }
+            }
+        });
+    }
+})
+
+
+function readResourcesFile(name: string): Buffer {
+    const jsonPath = path.join(__dirname, '..', '..', 'resources', name);
+    return fs.readFileSync(jsonPath);
+}
+
+describe("Multimodal RAG", () => {
+    class RAGCombination {
+        vectorStore: VectorStoreSupplier;
+        embeddings: EmbeddingsInfoSupplier;
+        llm: LLMSupplier;
+
+        constructor(vectorStore: VectorStoreSupplier, embeddings: EmbeddingsInfoSupplier, llm: LLMSupplier) {
+            this.vectorStore = vectorStore
+            this.embeddings = embeddings
+            this.llm = llm
+        }
+
+        toString(): string {
+            return `${this.embeddings.name()} embedding | ${this.llm.name()} llm | ${this.vectorStore.name()}}`
+        }
+    }
+
+
+    const vertexMultiModalEmbeddings = new EnvDependantEmbeddings(
+        ["GCLOUD_ACCOUNT_KEY_JSON"],
+        "vertex",
+        1408,
+        () => new GoogleVertexAIMultimodalEmbeddings(),
+        (query: Buffer) => new GoogleVertexAIMultimodalEmbeddings().embedImageQuery(query)
+    )
+
+    const geminiLLM = new EnvDependantLLM(
+        ["GOOGLE_API_KEY"],
+        "vertex gemini pro",
+        () => new ChatGoogleGenerativeAI({modelName: "gemini-pro-vision"}) as unknown as BaseLanguageModel
+    )
+
+
+    const vectorStores: Array<VectorStoreSupplier> = [
+        new AstraDBVectorStoreSupplier(),
+        new CassandraVectorStoreSupplier()
+    ]
+    const embeddingsLLM: Array<EmbeddingsLLMPair> = [
+        {embeddings: vertexMultiModalEmbeddings, llm: geminiLLM},
+    ]
+    const ragCombinations: Array<RAGCombination> = []
+    const ragCombinationsToSkip: Array<RAGCombination> = []
+    for (const vectorStore of vectorStores) {
+        for (const embeddings of embeddingsLLM) {
+            const ragCombination = new RAGCombination(vectorStore, embeddings.embeddings, embeddings.llm);
+            if (vectorStore.skip() || embeddings.embeddings.skip() || embeddings.llm.skip()) {
+                console.info(`Skipping test ${ragCombination}  (skip vector = ${vectorStore.skip()}, skip embeddings = ${embeddings.embeddings.skip()}, skip llm = ${embeddings.llm.skip()})`)
+                ragCombinationsToSkip.push(ragCombination)
+                continue
+            }
+            ragCombinations.push(ragCombination)
+        }
+    }
+    if (ragCombinationsToSkip.length) {
+        // eslint-disable-next-line
+        test.skip.each<RAGCombination>(ragCombinationsToSkip)('Test %s', (combination: RAGCombination) => {
+        });
+    }
+
+    if (ragCombinations.length) {
+        test.each<RAGCombination>(ragCombinations)('Test %s', async (combination: RAGCombination) => {
+
+            const llm: LLM = combination.llm.getLLM() as LLM
+            const vectorStore: VectorStore = await combination.vectorStore.initialize(new class implements EmbeddingsInfoSupplier {
+                embedImageQuery(query: Buffer): Promise<number[]> {
+                    throw new Error("Method not implemented.");
+                }
+
+                getDimensions(): number {
+                    return combination.embeddings.getDimensions();
+                }
+
+                getEmbeddings(): EmbeddingsInterface {
+                    return new ConfigurableMockEmbeddings(combination.embeddings.getDimensions());
+                }
+
+                name(): string {
+                    return "mock";
+                }
+
+                skip(): boolean {
+                    return false;
+                }
+            })
+            try {
+                const treeImage = readResourcesFile("tree.jpeg")
+
+                const docs = [
+                    {
+                        metadata: {"name": "Coffee Machine Ultra Cool"},
+                        buffer: readResourcesFile("coffee_machine.jpeg"),
+                    },
+                    {metadata: {"name": "Tree"}, buffer: treeImage},
+                    {metadata: {"name": "Another Tree"}, buffer: treeImage},
+                    {metadata: {"name": "Another Tree 2"}, buffer: treeImage},
+                    {metadata: {"name": "Another Tree 3"}, buffer: treeImage},
+                ]
+
+                for (const doc of docs) {
+                    const numbers = await combination.embeddings.embedImageQuery(doc.buffer);
+                    await vectorStore.addVectors([numbers], [{metadata: {...doc.metadata, id: randomUUID()}, pageContent: doc.metadata.name}])
+                }
+
+
+                const imageQuery = readResourcesFile("coffee_maker_part.png");
+
+                const resultDocs = await vectorStore.similaritySearchVectorWithScore(await combination.embeddings.embedImageQuery(imageQuery), 5)
+                const docsStr = resultDocs.map(([doc, score]) => "'" + doc.pageContent + "'").join(",")
+                const imageQueryBase64 = imageQuery.toString('base64');
+                const textPrompt = `Tell me which one of these products it is part of. Only include product from the ones below: ${docsStr}.`;
+                console.log("Prompt", textPrompt)
+                const messages = [
+                    new HumanMessage({
+                        content: [
+                            {
+                                type: "text",
+                                text: textPrompt,
+                            },
+                            {
+                                type: "image_url",
+                                image_url: `data:image/png;base64,${imageQueryBase64}`,
+                            },
+                        ],
+                    }),
+                ];
+
+                const res = await llm.invoke(messages);
+                console.log("Got response", res)
+                expect(res).toContain("Coffee Machine Ultra Cool")
+
             } finally {
                 try {
                     await combination.vectorStore.close()

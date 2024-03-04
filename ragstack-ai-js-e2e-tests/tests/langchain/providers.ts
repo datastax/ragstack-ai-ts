@@ -25,6 +25,8 @@ export interface EmbeddingsInfoSupplier extends Skippable, Nameable {
     getEmbeddings(): EmbeddingsInterface;
 
     getDimensions(): number;
+
+    embedImageQuery(query: Buffer): Promise<number[]>;
 }
 
 export interface LLMSupplier extends Skippable, Nameable {
@@ -71,12 +73,15 @@ export class EnvDependantEmbeddings extends EnvDependantSkippable implements Emb
     private readonly embeddingsName: string;
     private readonly dimensions: number;
     private readonly supplier: () => EmbeddingsInterface;
+    private readonly multiModalSupplier?: (query: Buffer) => Promise<number[]>;
 
-    constructor(env: string | string[], name: string, dimensions: number, supplier: () => EmbeddingsInterface) {
+    constructor(env: string | string[], name: string, dimensions: number, supplier: () => EmbeddingsInterface,
+                multiModalSupplier?: (query: Buffer) => Promise<number[]>) {
         super(env)
         this.embeddingsName = name
         this.dimensions = dimensions
         this.supplier = supplier
+        this.multiModalSupplier = multiModalSupplier
     }
 
     getDimensions(): number {
@@ -86,6 +91,11 @@ export class EnvDependantEmbeddings extends EnvDependantSkippable implements Emb
     getEmbeddings(): EmbeddingsInterface {
         return this.supplier();
     }
+
+    embedImageQuery(query: Buffer): Promise<number[]> {
+        return this.multiModalSupplier ? this.multiModalSupplier(query) : Promise.reject(new Error("Not supported"))
+    }
+
 
     name(): string {
         return this.embeddingsName;
