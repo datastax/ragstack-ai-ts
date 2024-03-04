@@ -172,6 +172,7 @@ describe("RAG pipeline compatibility", () => {
         {embeddings: bedrockTitanEmbeddings, llm: bedrockAnthropicLLM},
         // cohere is broken
         // {embeddings: bedrockCohereEmbeddings, llm: bedrockMetaLLM}
+        {embeddings: bedrockTitanEmbeddings, llm: bedrockMetaLLM}
     ]
     const ragCombinations: Array<RAGCombination> = []
     const ragCombinationsToSkip: Array<RAGCombination> = []

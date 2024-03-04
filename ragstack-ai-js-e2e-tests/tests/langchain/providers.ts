@@ -1,4 +1,4 @@
-import {getRequiredEnv, getVectorStoreHandler} from "../config";
+import { getVectorStoreHandler} from "../config";
 import {EmbeddingsInterface} from "@langchain/core/embeddings";
 import {BaseLanguageModel} from "@langchain/core/language_models/base";
 import {VectorDatabaseTypeNotSupported} from "../vectorStore";

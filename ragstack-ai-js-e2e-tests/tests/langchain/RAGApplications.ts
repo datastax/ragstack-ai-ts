@@ -2,7 +2,7 @@ import {VectorStore} from "@langchain/core/vectorstores";
 import {LLM} from "@langchain/core/language_models/llms";
 import {Document} from "@langchain/core/documents";
 import {randomUUID} from "node:crypto";
-import {ChatPromptTemplate, PromptTemplate} from "@langchain/core/prompts";
+import {ChatPromptTemplate} from "@langchain/core/prompts";
 import {RunnablePassthrough, RunnableSequence} from "@langchain/core/runnables";
 import {StringOutputParser} from "@langchain/core/output_parsers";
 import {ConversationalRetrievalQAChain} from "langchain/chains";
