@@ -124,6 +124,7 @@ export class LocalCassandraVectorStoreHandler implements VectorStoreHandler {
     async afterTest(): Promise<void> {
         if (this.client) {
             await this.client.shutdown()
+            this.client = undefined
         }
     }
 

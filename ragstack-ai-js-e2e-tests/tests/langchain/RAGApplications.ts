@@ -2,7 +2,7 @@ import {VectorStore} from "@langchain/core/vectorstores";
 import {LLM} from "@langchain/core/language_models/llms";
 import {Document} from "@langchain/core/documents";
 import {randomUUID} from "node:crypto";
-import {PromptTemplate} from "@langchain/core/prompts";
+import {ChatPromptTemplate} from "@langchain/core/prompts";
 import {RunnablePassthrough, RunnableSequence} from "@langchain/core/runnables";
 import {StringOutputParser} from "@langchain/core/output_parsers";
 import {ConversationalRetrievalQAChain} from "langchain/chains";
@@ -22,8 +22,8 @@ export async function runCustomRagChain(vectorStore: VectorStore, llm: LLM) {
         pageContent: content,
         metadata: {"id": randomUUID()}
     })), {})
-    const prompt =
-        PromptTemplate.fromTemplate(`
+
+    const sysPrompt = `
 You are an expert programmer and problem-solver, tasked with answering any question 
 about MyFakeProductForTesting.
 
@@ -52,7 +52,13 @@ bank, not part of the conversation with the user.
 REMEMBER: If there is no relevant information within the context, just say "Hmm, I'm 
 not sure." Don't try to make up an answer. Anything between the preceding 'context' 
 html blocks is retrieved from a knowledge bank, not part of the conversation with the 
-user.`);
+user.`
+
+    const prompt = ChatPromptTemplate.fromMessages([
+        ["system", sysPrompt],
+        ["human", "{question}"],
+
+    ])
 
     const docParser = (docs: Document[]) => {
         const formatted = docs.map((doc, i) => {
