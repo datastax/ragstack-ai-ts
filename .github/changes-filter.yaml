@@ -1,7 +1,7 @@
 # https://github.com/dorny/paths-filter
 e2e_tests:
-  - added|deleted|modified: "ragstack-ai-js-e2e-tests/**"
-  - "ragstack-ai-js/package.json"
+  - added|deleted|modified: "ragstack-ai-ts-e2e-tests/**"
+  - "ragstack-ai-ts/package.json"
   - "./.github/actions/**"
   - "./.github/workflows/ci.yml"
   - "./.github/workflows/_run_e2e_tests.yml"

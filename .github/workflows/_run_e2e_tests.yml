@@ -116,7 +116,7 @@ jobs:
         if: ${{ always() }}
         uses: ./.github/actions/add-report-to-github-summary
         with:
-          tests-path: "ragstack-ai-js-e2e-tests"
+          tests-path: "ragstack-ai-ts-e2e-tests"
 
       - name: Compute info
         if: ${{ always() }}
@@ -131,7 +131,7 @@ jobs:
         if: ${{ always() && inputs.deploy-to-slack }}
         uses: ./.github/actions/deploy-slack-report
         with:
-          from-report-file: "ragstack-ai-js-e2e-tests/failed-tests-report.txt"
+          from-report-file: "ragstack-ai-ts-e2e-tests/failed-tests-report.txt"
           type: "${{ inputs.title }}"
           outcome: ${{ steps.e2e-tests.outcome }}
           commit-url: "${{ steps.info.outputs.commit-url }}"
@@ -143,7 +143,7 @@ jobs:
         with:
           report-type: tests
           token: ${{ secrets.TESTSPACE_TOKEN }}
-          report-file: ragstack-ai-js-e2e-tests/junit.xml
+          report-file: ragstack-ai-ts-e2e-tests/junit.xml
           space: ${{ inputs.testspace-space }}
 
       - name: Cleanup AstraDB
