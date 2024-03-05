@@ -12,7 +12,9 @@ export async function recordLangsmithPublicUrl(runId: string) {
             break
         } catch (e) {
             if (retries === 0) {
-                throw e
+                // give up, we don't want to make the test fail because of this
+                console.error("Failed to share run", e)
+                return
             }
             retries -= 1
         }
