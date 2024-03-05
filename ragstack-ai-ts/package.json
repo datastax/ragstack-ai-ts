@@ -1,6 +1,6 @@
 {
-  "name": "@datastax/ragstack-ai-js",
-  "description": "DataStax RAGStack JS",
+  "name": "@datastax/ragstack-ai-ts",
+  "description": "DataStax RAGStack TS",
   "version": "0.1.0",
   "license": "BUSL-1.1",
   "readme": "../README.md",

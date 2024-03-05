@@ -134,7 +134,7 @@ creds.json
 .DS_Store
 build.zip
 
-ragstack-ai-js/yarn.lock
+ragstack-ai-ts/yarn.lock
 package-lock.json
 
 junit.xml

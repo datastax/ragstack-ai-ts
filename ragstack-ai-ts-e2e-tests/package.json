@@ -1,5 +1,5 @@
 {
-  "name": "@datastax/ragstack-ai-js-tests",
+  "name": "@datastax/ragstack-ai-ts-tests",
   "version": "0.0.1",
   "license": "MIT",
   "author": {
@@ -9,7 +9,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@datastax/ragstack-ai-js": "../ragstack-ai-js"
+    "@datastax/ragstack-ai-ts": "../ragstack-ai-ts"
   },
   "scripts": {
     "lint": "eslint .",
