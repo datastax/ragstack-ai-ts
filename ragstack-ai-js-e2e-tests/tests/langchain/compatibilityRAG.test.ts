@@ -151,7 +151,7 @@ describe("RAG pipeline compatibility", () => {
 
     const bedrockMetaLLM = new EnvDependantLLM(
         ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "BEDROCK_AWS_REGION"],
-        "bedrock anthropic",
+        "bedrock meta",
         () => {
             return new BedrockChat({
                 model: "meta.llama2-13b-chat-v1",
