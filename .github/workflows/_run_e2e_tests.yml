@@ -97,6 +97,9 @@ jobs:
           HUGGINGFACE_HUB_KEY: "${{ secrets.E2E_TESTS_HUGGINGFACE_HUB_KEY }}"
           NVIDIA_API_KEY: "${{ secrets.E2E_TESTS_NVIDIA_API_KEY }}"
           LANGCHAIN_API_KEY: "${{ secrets.E2E_TESTS_LANGCHAIN_API_KEY }}"
+          LANGCHAIN_TRACING_V2: "true"
+          LANGCHAIN_ENDPOINT: "https://api.smith.langchain.com"
+          LANGCHAIN_PROJECT: "ragstack-ci"
           UNSTRUCTURED_API_KEY: "${{ secrets.E2E_TESTS_UNSTRUCTURED_API_KEY }}"
           UNSTRUCTURED_API_URL: "${{ secrets.E2E_TESTS_UNSTRUCTURED_API_URL }}"
         run: |
