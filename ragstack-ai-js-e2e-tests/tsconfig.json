@@ -29,5 +29,5 @@
     "dist",
     "docs"
   ],
-  "files": ["node_modules/jest-expect-message/types/index.d.ts", "globals.d.ts"]
+  "files": ["node_modules/jest-expect-message/types/index.d.ts"]
 }

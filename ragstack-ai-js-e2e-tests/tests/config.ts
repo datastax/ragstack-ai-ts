@@ -60,13 +60,13 @@ export function testIf(evalCondition: () => boolean): jest.It {
 let currentTestProperties: Record<string, string> = {}
 beforeEach(() => {
     currentTestProperties = {}
-    console.log("starting", expect.getState().currentTestName)
 })
 const TEST_PROPERTIES_FILENAME = "junit-test-properties.json";
 afterEach(() => {
-
+    if (!Object.keys(currentTestProperties).length) {
+        return
+    }
     const name = expect.getState().currentTestName as string
-    console.log("ending test", name)
     let root: Record<string, Record<string, string>> = {}
     if (fs.existsSync(TEST_PROPERTIES_FILENAME)) {
         root = JSON.parse(fs.readFileSync(TEST_PROPERTIES_FILENAME, "utf-8"))
