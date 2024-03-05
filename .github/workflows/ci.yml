@@ -27,15 +27,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Lint
         run: |
-          cd ragstack-ai-js
+          cd ragstack-ai-ts
           yarn install --immutable
           yarn run lint
-          cd ../ragstack-ai-js-e2e-tests
+          cd ../ragstack-ai-ts-e2e-tests
           yarn install --immutable
           yarn run lint
       - name: Unit tests
         run: |
-          cd ragstack-ai-js
+          cd ragstack-ai-ts
           yarn run test
       - uses: dorny/paths-filter@v2
         id: filter

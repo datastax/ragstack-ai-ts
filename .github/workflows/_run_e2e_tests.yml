@@ -104,7 +104,7 @@ jobs:
           UNSTRUCTURED_API_URL: "${{ secrets.E2E_TESTS_UNSTRUCTURED_API_URL }}"
         run: |
           if [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
-            cd ragstack-ai-js-e2e-tests
+            cd ragstack-ai-ts-e2e-tests
             yarn install --immutable
             yarn run test
           else
