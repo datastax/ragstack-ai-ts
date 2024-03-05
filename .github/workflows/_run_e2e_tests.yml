@@ -97,6 +97,8 @@ jobs:
           HUGGINGFACE_HUB_KEY: "${{ secrets.E2E_TESTS_HUGGINGFACE_HUB_KEY }}"
           NVIDIA_API_KEY: "${{ secrets.E2E_TESTS_NVIDIA_API_KEY }}"
           LANGCHAIN_API_KEY: "${{ secrets.E2E_TESTS_LANGCHAIN_API_KEY }}"
+          UNSTRUCTURED_API_KEY: "${{ secrets.E2E_TESTS_UNSTRUCTURED_API_KEY }}"
+          UNSTRUCTURED_API_URL: "${{ secrets.E2E_TESTS_UNSTRUCTURED_API_URL }}"
         run: |
           if [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
             cd ragstack-ai-js-e2e-tests
