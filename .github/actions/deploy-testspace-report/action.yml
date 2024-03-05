@@ -17,8 +17,7 @@ inputs:
     required: true
     description: "Report to upload"
   repository:
-    # TODO: change to ragstack-ai
-    default: "nicoloboschi"
+    default: "ragstack-ai"
     description: "Testspace repository"
   project:
     default: "RAGStack TS"
