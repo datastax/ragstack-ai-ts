@@ -26,13 +26,17 @@ jobs:
 
       - name: "Setup: Node"
         uses: ./.github/actions/setup-node
+      - name: "Install"
+        run: |
+          cd ragstack-ai-js
+          yarn install --immutable
 
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high --json-file-output=snyk-vuln.json --print-deps --all-projects --exclude=ragstack-ai-js-e2e-tests
+          args: --debug --severity-threshold=high --json-file-output=snyk-vuln.json --print-deps --all-projects --exclude=ragstack-ai-js-e2e-tests
 
       - name: Move snyk vulnerabilities file
         if: ${{ always() }}
