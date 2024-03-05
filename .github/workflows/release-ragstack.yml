@@ -3,7 +3,7 @@ name: Release RAGStack package
 on:
   push:
     tags:
-      - "ragstack-ai-*"
+      - "ragstack-ai-ts-*"
 
 jobs:
   release:
@@ -14,12 +14,20 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
 
-      # TODO: release on npm
+      - name: "Setup: Node"
+        uses: ./.github/actions/setup-node
+
+      - name: "Install"
+        run: |
+          cd ragstack-ai-ts
+          yarn install --immutable
+      - run: yarn npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "dist/*.whl"
           token: ${{ secrets.GITHUB_TOKEN }}
           generateReleaseNotes: true
           prerelease: false
