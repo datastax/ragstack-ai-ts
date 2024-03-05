@@ -151,7 +151,7 @@ describe("RAG pipeline compatibility", () => {
 
     const bedrockMetaLLM = new EnvDependantLLM(
         ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "BEDROCK_AWS_REGION"],
-        "bedrock anthropic",
+        "bedrock meta",
         () => {
             return new BedrockChat({
                 model: "meta.llama2-13b-chat-v1",
@@ -268,7 +268,7 @@ describe("Multimodal RAG", () => {
         }
 
         toString(): string {
-            return `${this.embeddings.name()} embedding | ${this.llm.name()} llm | ${this.vectorStore.name()}}`
+            return `${this.embeddings.name()} embedding | ${this.llm.name()} llm | ${this.vectorStore.name()}`
         }
     }
 
@@ -315,7 +315,7 @@ describe("Multimodal RAG", () => {
     }
 
     if (ragCombinations.length) {
-        test.each<RAGCombination>(ragCombinations)('Test %s', async (combination: RAGCombination) => {
+        test.each<RAGCombination>(ragCombinations)('Test multi modal %s', async (combination: RAGCombination) => {
 
             const llm: LLM = combination.llm.getLLM() as LLM
             const vectorStore: VectorStore = await combination.vectorStore.initialize(new class implements EmbeddingsInfoSupplier {
