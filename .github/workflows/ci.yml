@@ -54,8 +54,7 @@ jobs:
       astradb: false
       vector-database-type: "local-cassandra"
       deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-      # deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-      deploy-to-testspace: true
+      deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
       testspace-space: "RAGStack test suite - RAGStack dev - DSE"
 
   ragstack-dev-astradev-tests:
@@ -74,6 +73,5 @@ jobs:
       astradb-cloud: "${{ needs.preconditions.outputs.astradb-dev-cloud }}"
       vector-database-type: "astradb"
       deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-      #deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-      deploy-to-testspace: true
+      deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
       testspace-space: "RAGStack test suite - RAGStack dev - AstraDB"
