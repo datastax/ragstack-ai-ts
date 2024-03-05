@@ -14,7 +14,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "jest"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "devDependencies": {
     "@aws-crypto/sha256-js": "^5.2.0",
@@ -33,6 +33,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.19",
     "babel-jest": "^29.7.0",
+    "cross-env": "^7.0.3",
     "d3-dsv": "^3.0.1",
     "dotenv": "^16.4.5",
     "eslint": "^8.56.0",
