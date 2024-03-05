@@ -22,7 +22,7 @@ import * as path from "node:path";
 import { EmbeddingsInterface} from "@langchain/core/embeddings";
 import {ChatGoogleGenerativeAI} from "@langchain/google-genai";
 import {BaseLanguageModel} from "@langchain/core/language_models/base";
-import {HumanMessage} from "@langchain/core/messages";
+import {AIMessage, HumanMessage} from "@langchain/core/messages";
 import {expect} from "@jest/globals";
 import {randomUUID} from "node:crypto";
 
@@ -112,10 +112,10 @@ describe("RAG pipeline compatibility", () => {
         ["AZURE_OPEN_AI_KEY", "AZURE_OPEN_AI_ENDPOINT"],
         "azure openai",
         () => new AzureChatOpenAI({
-            azureOpenAIApiKey: getRequiredEnv("AZURE_OPEN_AI_KEY"),
-            azureOpenAIApiVersion: "2023-05-15",
-            azureOpenAIBasePath: getRequiredEnv("AZURE_OPEN_AI_ENDPOINT"),
-            azureOpenAIApiDeploymentName: "gpt-35-turbo",
+            openAIApiKey: getRequiredEnv("AZURE_OPEN_AI_KEY"),
+            openAIApiVersion: "2023-05-15",
+            openAIBasePath: getRequiredEnv("AZURE_OPEN_AI_ENDPOINT"),
+            deploymentName: "gpt-35-turbo",
         }))
 
 
@@ -383,9 +383,9 @@ describe("Multimodal RAG", () => {
                     }),
                 ];
 
-                const res = await llm.invoke(messages);
+                const res = await llm.invoke(messages) as unknown as AIMessage;
                 console.log("Got response", res)
-                expect(res).toContain("Coffee Machine Ultra Cool")
+                expect(res.content).toContain("Coffee Machine Ultra Cool")
 
             } finally {
                 try {
