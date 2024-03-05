@@ -268,7 +268,7 @@ describe("Multimodal RAG", () => {
         }
 
         toString(): string {
-            return `${this.embeddings.name()} embedding | ${this.llm.name()} llm | ${this.vectorStore.name()}}`
+            return `${this.embeddings.name()} embedding | ${this.llm.name()} llm | ${this.vectorStore.name()}`
         }
     }
 
@@ -315,7 +315,7 @@ describe("Multimodal RAG", () => {
     }
 
     if (ragCombinations.length) {
-        test.each<RAGCombination>(ragCombinations)('Test %s', async (combination: RAGCombination) => {
+        test.each<RAGCombination>(ragCombinations)('Test multi modal %s', async (combination: RAGCombination) => {
 
             const llm: LLM = combination.llm.getLLM() as LLM
             const vectorStore: VectorStore = await combination.vectorStore.initialize(new class implements EmbeddingsInfoSupplier {

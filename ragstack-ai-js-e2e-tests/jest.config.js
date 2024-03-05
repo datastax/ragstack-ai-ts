@@ -13,7 +13,8 @@ module.exports = {
         ["jest-junit", {
         suiteName: "RAGStack CI",
         classNameTemplate: "{classname}",
-        titleTemplate: "{title}"
+        titleTemplate: "{title}",
+        testCasePropertiesFile: "jest.junit.js"
     }]
     ]
 }

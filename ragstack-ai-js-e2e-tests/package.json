@@ -56,6 +56,6 @@
     "@langchain/openai": "^0.0.14",
     "cassandra-driver": "^4.7.2",
     "langchain": "^0.1.23",
-    "langsmith": "^0.1.8"
+    "langsmith": "^0.1.11"
   }
 }

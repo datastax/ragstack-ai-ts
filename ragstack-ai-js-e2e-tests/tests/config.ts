@@ -1,4 +1,6 @@
 import {AstraDBVectorStoreHandler, LocalCassandraVectorStoreHandler, VectorStoreHandler} from "./vectorStore";
+import {afterEach} from "@jest/globals";
+import * as fs from "fs";
 
 export class RequiredEnvNotSet extends Error {
     env: string;
@@ -52,4 +54,27 @@ export function testIf(evalCondition: () => boolean): jest.It {
     } else {
         return test
     }
+}
+
+
+let currentTestProperties: Record<string, string> = {}
+beforeEach(() => {
+    currentTestProperties = {}
+    console.log("starting", expect.getState().currentTestName)
+})
+const TEST_PROPERTIES_FILENAME = "junit-test-properties.json";
+afterEach(() => {
+
+    const name = expect.getState().currentTestName as string
+    console.log("ending test", name)
+    let root: Record<string, Record<string, string>> = {}
+    if (fs.existsSync(TEST_PROPERTIES_FILENAME)) {
+        root = JSON.parse(fs.readFileSync(TEST_PROPERTIES_FILENAME, "utf-8"))
+    }
+    root[name] = currentTestProperties
+    fs.writeFileSync(TEST_PROPERTIES_FILENAME, JSON.stringify(root), "utf-8")
+})
+
+export function appendTestCaseProperty(key: string, value: string) {
+    currentTestProperties[key] = value
 }

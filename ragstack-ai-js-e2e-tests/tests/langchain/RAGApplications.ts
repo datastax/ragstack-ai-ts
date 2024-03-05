@@ -8,6 +8,8 @@ import {StringOutputParser} from "@langchain/core/output_parsers";
 import {ConversationalRetrievalQAChain} from "langchain/chains";
 import {BaseListChatMessageHistory} from "@langchain/core/chat_history";
 import {BufferMemory} from "langchain/memory";
+import {RunCollectorCallbackHandler} from "@langchain/core/tracers/run_collector";
+import {recordLangsmithPublicUrl} from "../tracing";
 
 const sampleData = [
     "MyFakeProductForTesting is a versatile testing tool designed to streamline the testing process for software developers, quality assurance professionals, and product testers. It provides a comprehensive solution for testing various aspects of applications and systems, ensuring robust performance and functionality.",
@@ -77,8 +79,16 @@ user.`
         llm,
         new StringOutputParser(),
     ]);
-    const result = await chain.invoke("When was released MyFakeProductForTesting for the first time ?");
+    const collector = new RunCollectorCallbackHandler({});
+
+
+    const result = await chain.invoke("When was released MyFakeProductForTesting for the first time ?", {
+        callbacks: [collector]
+    });
     console.log(result);
+
+    console.log("Run id: ", collector.tracedRuns[0].id)
+    await recordLangsmithPublicUrl(collector.tracedRuns[0].id)
     expect(result).toContain("June 2020")
 }
 

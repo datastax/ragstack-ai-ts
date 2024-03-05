@@ -141,3 +141,4 @@ junit.xml
 
 failed-tests-report.txt
 all-tests-report.txt
+junit-test-properties.json
