@@ -18,14 +18,14 @@ RAGStack uses the [Astra DB Serverless (Vector) database](https://docs.datastax.
 
 ## Quick Install
 
-With pip:
-```bash
-yarn add @datastax/ragstack-ai-ts
-```
-or
-```bash
-npm install @datastax/ragstack-ai-ts
-```
+- Yarn
+    ```bash
+    yarn add @datastax/ragstack-ai-ts
+    ```
+- NPM
+    ```bash
+    npm install @datastax/ragstack-ai-ts
+    ```
 
 ## Documentation
 
