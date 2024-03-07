@@ -10,7 +10,7 @@
 Looking for the Python version? Check out [ragstack](https://github.com/datastax/ragstack-ai).
 
 
-RAGStack includes the best open-source for implementing RAG, giving developers a comprehensive Gen AI Stack leveraging [LangChain](https://python.langchain.com/docs/get_started/introduction), [CassIO](https://cassio.org/), and more. RAGStack leverages the LangChain ecosystem and is fully compatible with LangSmith for monitoring your AI deployments.
+RAGStack includes the best open-source for implementing RAG, giving developers a comprehensive Gen AI Stack leveraging [LangChainJS](https://github.com/langchain-ai/langchainjs) and more. RAGStack leverages the LangChain ecosystem and is fully compatible with LangSmith for monitoring your AI deployments.
 
 For each open-source project included in RAGStack, we select a version lineup and then test the combination for compatibility, performance, and security. Our extensive test suite ensures that RAGStack components work well together so you can confidently deploy them in production.
 
