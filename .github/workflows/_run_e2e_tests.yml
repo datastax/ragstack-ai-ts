@@ -107,6 +107,22 @@ jobs:
             cd ragstack-ai-ts-e2e-tests
             yarn install --immutable
             yarn run test
+          elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
+            cd ragstack-ai-ts-e2e-tests
+            yarn remove @datastax/ragstack-ai-ts
+            lc_repo="/@https://github.com/langchain-ai/langchain.git#head=main"
+            yarn add \
+              @datastax/astra-db-ts \
+              cassandra-driver \
+              langchain${lc_repo} \
+              @langchain/azure-openai${lc_repo}&path=packages/azure-openai \
+              @langchain/community${lc_repo}&path=packages/community \
+              @langchain/core${lc_repo}&path=packages/core \
+              @langchain/openai${lc_repo}&path=packages/openai \
+              langchain${lc_repo}&path=packages/langchain \
+              langsmith/@https://github.com/langchain-ai/langsmith-sdk.git#head=main&path=js
+            yarn install --immutable
+            yarn run test
           else
             echo "Unknown suite name: ${{ inputs.suite-name }}"
             exit 1
@@ -125,6 +141,9 @@ jobs:
           if [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
             commit_ref=$(git rev-parse --short HEAD)
             echo "commit-url=https://github.com/datastax/ragstack-ai-ts/commits/${commit_ref}" >> $GITHUB_OUTPUT
+          elif [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
+            commit_ref=$(yarn list --pattern langchain | grep langchain@ | awk '{split($0,a,"@"); print a[2]}')
+            echo "commit-url=https://github.com/langchain-ai/langchainjs/commits/${commit_ref}" >> $GITHUB_OUTPUT
           fi
 
       - name: Slack deploy report
