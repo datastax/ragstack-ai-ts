@@ -14,6 +14,7 @@
     "@langchain/community": "https://gitpkg.now.sh/langchain-ai/langchainjs/libs/langchain-community?main",
     "@langchain/core": "https://gitpkg.now.sh/langchain-ai/langchainjs/langchain-core?main",
     "@langchain/openai": "https://gitpkg.now.sh/langchain-ai/langchainjs/libs/langchain-openai?main",
+    "@langchain/google-genai": "https://gitpkg.now.sh/langchain-ai/langchainjs/libs/langchain-google-genai?main",
     "cassandra-driver": "*",
     "langsmith": "https://gitpkg.now.sh/langchain-ai/langsmith-sdk/js?main"
   },
@@ -30,7 +31,6 @@
     "@aws-sdk/types": "^3.523.0",
     "@azure/storage-blob": "^12.17.0",
     "@jest/globals": "^29.7.0",
-    "@langchain/google-genai": "^0.0.10",
     "@smithy/eventstream-codec": "^2.1.3",
     "@smithy/protocol-http": "^3.2.1",
     "@smithy/signature-v4": "^2.1.3",
@@ -55,13 +55,13 @@
     "typescript-eslint": "^7.0.2"
   },
   "peerDependencies": {
-    "@datastax/astra-db-ts": "^0.1.4",
-    "@langchain/azure-openai": "^0.0.2",
-    "@langchain/community": "^0.0.32",
-    "@langchain/core": "^0.1.32",
-    "@langchain/openai": "^0.0.14",
-    "cassandra-driver": "^4.7.2",
-    "langchain": "^0.1.23",
-    "langsmith": "^0.1.11"
+    "@datastax/astra-db-ts": "*",
+    "@langchain/azure-openai": "*",
+    "@langchain/community": "*",
+    "@langchain/core": "*",
+    "@langchain/openai": "*",
+    "cassandra-driver": "*",
+    "langchain": "*",
+    "langsmith": "*"
   }
 }
