@@ -111,6 +111,7 @@ jobs:
             cd ragstack-ai-ts-e2e-tests
             rm -rf package.json
             mv package.langchain.json package.json
+            cat package.json | jq '.dependencies'
             yarn install
             yarn run test
           else
