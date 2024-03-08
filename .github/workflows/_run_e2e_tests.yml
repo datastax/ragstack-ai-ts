@@ -119,6 +119,11 @@ jobs:
               mv "$basename.tmp" "$file_name"
             done
             yarn install
+            npm -g install typescript
+            cd node_modules/@langchain
+            find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && NODE_OPTIONS=--max-old-space-size=4096 tsc --outDir dist/" \;
+            cd ../..
+          
             yarn run test
           else
             echo "Unknown suite name: ${{ inputs.suite-name }}"
