@@ -9,7 +9,13 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@datastax/ragstack-ai-ts": "../ragstack-ai-ts"
+    "@datastax/astra-db-ts": "*",
+    "@langchain/azure-openai": "https://gitpkg.now.sh/langchain-ai/langchainjs/libs/langchain-azure-openai?main",
+    "@langchain/community": "https://gitpkg.now.sh/langchain-ai/langchainjs/libs/langchain-community?main",
+    "@langchain/core": "https://gitpkg.now.sh/langchain-ai/langchainjs/langchain-core?main",
+    "@langchain/openai": "https://gitpkg.now.sh/langchain-ai/langchainjs/libs/langchain-openai?main",
+    "cassandra-driver": "*",
+    "langsmith": "https://gitpkg.now.sh/langchain-ai/langsmith-sdk/js?main"
   },
   "scripts": {
     "lint": "eslint .",
@@ -55,6 +61,7 @@
     "@langchain/core": "^0.1.32",
     "@langchain/openai": "^0.0.14",
     "cassandra-driver": "^4.7.2",
-    "langchain": "^0.1.23"
+    "langchain": "^0.1.23",
+    "langsmith": "^0.1.11"
   }
 }
