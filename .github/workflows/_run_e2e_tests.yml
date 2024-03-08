@@ -112,18 +112,8 @@ jobs:
             rm -rf package.json
             mv package.langchain.json package.json
             cat package.json | jq '.dependencies'
-            find tests -type f -name "*.ts" | while read file_name; do
-              basename=$(basename $file_name)
-              echo "// @ts-nocheck" > "$basename.tmp"
-              cat "$file_name" >> "$basename.tmp"
-              mv "$basename.tmp" "$file_name"
-            done
             yarn install
-            npm -g install typescript
-            cd node_modules/@langchain
-            find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && NODE_OPTIONS=--max-old-space-size=4096 tsc --outDir dist/" \;
-            cd ../..
-          
+            yarn upgrade --latest
             yarn run test
           else
             echo "Unknown suite name: ${{ inputs.suite-name }}"
