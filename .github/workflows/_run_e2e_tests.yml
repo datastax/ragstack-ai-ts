@@ -112,7 +112,7 @@ jobs:
             rm -rf package.json
             mv package.langchain.json package.json
             cat package.json | jq '.dependencies'
-            find tests -type f -name "*.ts" | while read file_name do;
+            find tests -type f -name "*.ts" | while read file_name; do
               basename=$(basename $file_name)
               echo "// @ts-nocheck" > "$basename.tmp"
               cat "$file_name" >> "$basename.tmp"
