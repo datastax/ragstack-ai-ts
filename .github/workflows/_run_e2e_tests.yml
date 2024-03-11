@@ -107,6 +107,14 @@ jobs:
             cd ragstack-ai-ts-e2e-tests
             yarn install --immutable
             yarn run test
+          elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
+            cd ragstack-ai-ts-e2e-tests
+            rm -rf package.json
+            mv package.langchain.json package.json
+            cat package.json | jq '.dependencies'
+            yarn install
+            yarn upgrade --latest
+            yarn run test
           else
             echo "Unknown suite name: ${{ inputs.suite-name }}"
             exit 1
@@ -125,6 +133,10 @@ jobs:
           if [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
             commit_ref=$(git rev-parse --short HEAD)
             echo "commit-url=https://github.com/datastax/ragstack-ai-ts/commits/${commit_ref}" >> $GITHUB_OUTPUT
+          elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
+            cd ragstack-ai-ts-e2e-tests
+            langchain_version=$(grep "langchain@npm" yarn.lock | head -1 | awk '{split($0,a,":"); print a[2]}' | tr -d '\"')
+            echo "commit-url=https://github.com/langchain-ai/langchainjs/releases/tag/${langchain_version}" >> $GITHUB_OUTPUT
           fi
 
       - name: Slack deploy report

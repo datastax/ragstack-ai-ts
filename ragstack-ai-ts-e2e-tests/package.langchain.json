@@ -9,7 +9,15 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@datastax/ragstack-ai-ts": "../ragstack-ai-ts"
+    "@datastax/astra-db-ts": "*",
+    "langchain": "*",
+    "@langchain/azure-openai": "*",
+    "@langchain/community": "*",
+    "@langchain/core": "*",
+    "@langchain/openai": "*",
+    "@langchain/google-genai": "*",
+    "cassandra-driver": "*",
+    "langsmith": "*"
   },
   "scripts": {
     "lint": "eslint .",
@@ -17,7 +25,6 @@
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "devDependencies": {
-    "@langchain/google-genai": "*",
     "@aws-crypto/sha256-js": "^5.2.0",
     "@aws-sdk/client-bedrock-runtime": "^3.525.0",
     "@aws-sdk/client-s3": "^3.525.0",
