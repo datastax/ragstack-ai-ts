@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@datastax/astra-db-ts": "*",
+    "langchain": "*",
     "@langchain/azure-openai": "*",
     "@langchain/community": "*",
     "@langchain/core": "*",
