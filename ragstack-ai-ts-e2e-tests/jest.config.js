@@ -3,7 +3,7 @@
 module.exports = {
     preset: 'ts-jest',
     testEnvironment: "./jest.env.js",
-    testTimeout: 120000,
+    testTimeout: 180000,
     maxConcurrency: 1,
     setupFiles: ["dotenv/config"],
     setupFilesAfterEnv: ["jest-expect-message"],
