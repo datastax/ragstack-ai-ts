@@ -194,7 +194,7 @@ def parse_snyk_report(input_file: str):
                     local_links.append(link)
                     all_links.append(link)
             else:
-                test_case_name = "Python dependencies"
+                test_case_name = "NPM dependencies"
 
             passed = len(vulnerabilities) == 0
             for v in vulnerabilities.values():

@@ -76,29 +76,29 @@ jobs:
       deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
       testspace-space: "RAGStack test suite - RAGStack dev - AstraDB"
 
-  langchain-dev-dse-tests:
-    name: "LangChain dev / DSE"
+  langchain-latest-dse-tests:
+    name: "LangChain latest / DSE"
     needs: [ "preconditions" ]
     if: ${{ needs.preconditions.outputs.is-scheduled == 'true' || needs.preconditions.outputs.e2e_tests == 'true' }}
     uses: ./.github/workflows/_run_e2e_tests.yml
     secrets: inherit
     with:
-      title: "LangChain dev / DSE"
+      title: "LangChain latest / DSE"
       suite-name: "langchain"
       astradb: false
       vector-database-type: "local-cassandra"
       deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
       deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-      testspace-space: "RAGStack test suite - LangChain dev - DSE"
+      testspace-space: "RAGStack test suite - LangChain latest - DSE"
 
-  langchain-dev-astradev-tests:
-    name: "LangChain dev / AstraDB dev"
+  langchain-latest-astradev-tests:
+    name: "LangChain latest / AstraDB dev"
     needs: [ "preconditions" ]
     if: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
     uses: ./.github/workflows/_run_e2e_tests.yml
     secrets: inherit
     with:
-      title: "LangChain dev / AstraDB dev"
+      title: "LangChain latest / AstraDB dev"
       suite-name: "langchain"
       astradb: true
       astradb-token-secret-name: "E2E_TESTS_ASTRA_DEV_DB_TOKEN"
@@ -109,4 +109,4 @@ jobs:
       #deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
       deploy-to-slack: true
       deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-      testspace-space: "RAGStack test suite - LangChain dev - AstraDB"
+      testspace-space: "RAGStack test suite - LangChain latest - AstraDB"
