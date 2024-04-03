@@ -35,9 +35,10 @@ jobs:
           yarn run test
       - name: Install E2E tests
         run: |
+          pwd
           git status
           cd ragstack-ai-ts-e2e-tests
-          yarn run install
+          yarn install
           yarn run lint
       - uses: dorny/paths-filter@v2
         id: filter
