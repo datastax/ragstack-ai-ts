@@ -8,11 +8,15 @@ inputs:
 runs:
   using: "composite"
   steps:
+    # This hell is described here: https://github.com/actions/setup-node/issues/899
+    - name: Enable Corepack before setting up Node
+      run: |
+        corepack enable
+      shell: bash
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
     - shell: bash
       run: |
         node --version
-        corepack enable
         yarn --version
