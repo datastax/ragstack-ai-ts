@@ -135,7 +135,6 @@ creds.json
 build.zip
 
 package-lock.json
-yarn.lock
 
 junit.xml
 
