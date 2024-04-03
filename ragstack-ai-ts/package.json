@@ -24,7 +24,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "jest",
-    "release:set-version": "yarn -v && yarn plugin import version && yarn version $NEW_VERSION",
+    "release:set-version": "yarn -v && yarn version $NEW_VERSION",
     "release:publish": "yarn -v && yarn npm publish --access public"
   },
   "devDependencies": {

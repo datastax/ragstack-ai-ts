@@ -29,6 +29,7 @@ jobs:
         uses: ./.github/actions/setup-node
       - name: Lint
         run: |
+          set -ex
           cd ragstack-ai-ts
           yarn install --immutable
           yarn run lint
