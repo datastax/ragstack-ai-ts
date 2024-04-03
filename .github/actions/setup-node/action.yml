@@ -31,10 +31,10 @@ runs:
         yarn cache clean
         yarn set version stable --yarn-path
         yarn -v
-        cd ragstack-ai-ts
-        yarn set version $(yarn -v) --only-if-needed
-        cd ../ragstack-ai-ts-e2e-tests
-        yarn set version $(yarn -v) --only-if-needed
+#        cd ragstack-ai-ts
+#        yarn set version $(yarn -v) --only-if-needed
+#        cd ../ragstack-ai-ts-e2e-tests
+#        yarn set version $(yarn -v) --only-if-needed
         
         
         
