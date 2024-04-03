@@ -13,13 +13,16 @@ runs:
       run: |
         corepack enable
       shell: bash
-    - uses: actions/setup-node@v4
+    - name: Install node
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
         cache: 'yarn'
         cache-dependency-path: '**/yarn.lock'
-    - shell: bash
+    - name: Check versions
+      shell: bash
       run: |
+        echo "Checking versions"
         node --version
         yarn plugin import version
         yarn --version
