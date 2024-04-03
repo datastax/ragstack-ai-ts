@@ -21,7 +21,8 @@ jobs:
         run: |
           cd ragstack-ai-ts
           yarn install --immutable
-      - run: |
+      - name: "Release package"
+        run: |
           cd ragstack-ai-ts
           yarn run release:publish
         env:
