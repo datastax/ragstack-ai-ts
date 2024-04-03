@@ -1442,7 +1442,7 @@ __metadata:
     "@aws-sdk/credential-provider-node": "npm:^3.525.0"
     "@aws-sdk/types": "npm:^3.523.0"
     "@azure/storage-blob": "npm:^12.17.0"
-    "@datastax/ragstack-ai-ts": ../ragstack-ai-ts
+    "@datastax/ragstack-ai-ts": "file:../ragstack-ai-ts"
     "@jest/globals": "npm:^29.7.0"
     "@langchain/google-genai": "npm:*"
     "@smithy/eventstream-codec": "npm:^2.1.3"

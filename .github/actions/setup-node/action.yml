@@ -20,10 +20,10 @@ runs:
     - name: Check versions
       shell: bash
       run: |
-        echo "Checking versions"
         node --version
         yarn --version
-        yarn set version 4.1.1 --yarn-path        
+        yarn set version 4.1.1 --yarn-path
+        yarn --version
         
         
         
