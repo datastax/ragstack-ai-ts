@@ -12,7 +12,6 @@ runs:
     - name: Enable Corepack before setting up Node
       run: |
         yarn --version
-        #npm uninstall -g yarn
         corepack enable
         echo "Corepack enabled"
 
@@ -29,3 +28,5 @@ runs:
         yarn --version
         #yarn plugin import version
         rm -f ~/.yarn*
+        yarn cache clean
+        
