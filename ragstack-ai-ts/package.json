@@ -1,12 +1,20 @@
 {
   "name": "@datastax/ragstack-ai-ts",
   "description": "DataStax RAGStack TS",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "BUSL-1.1",
-  "readme": "../README.md",
   "author": {
     "name": "DataStax"
   },
+  "keywords": [
+    "llm",
+    "ai",
+    "rag",
+    "chain",
+    "embeddings",
+    "vectorstores",
+    "astradb"
+  ],
   "engines": {
     "node": ">=18"
   },
@@ -23,7 +31,9 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "jest"
+    "test": "jest",
+    "release:set-version": "yarn -v && yarn version $NEW_VERSION",
+    "release:publish": "yarn -v && yarn npm publish --access public"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
@@ -43,6 +53,5 @@
     "turbo": "^1.12.4",
     "typescript": "^5.3.3",
     "typescript-eslint": "^7.0.2"
-  },
-  "packageManager": "yarn@0.1.0"
+  }
 }

@@ -25,18 +25,22 @@ jobs:
       is-scheduled: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@v4
-      - name: Lint
+      - name: "Setup: Node"
+        uses: ./.github/actions/setup-node
+      - name: Install and run unit tests
         run: |
           cd ragstack-ai-ts
-          yarn install --immutable
+          yarn install
           yarn run lint
-          cd ../ragstack-ai-ts-e2e-tests
-          yarn install --immutable
-          yarn run lint
-      - name: Unit tests
-        run: |
-          cd ragstack-ai-ts
           yarn run test
+      - name: Install E2E tests
+        run: |
+          pwd
+          git status
+          cd ragstack-ai-ts-e2e-tests
+          export YARN_ENABLE_HARDENED_MODE=0
+          yarn install
+          yarn run lint
       - uses: dorny/paths-filter@v2
         id: filter
         with:

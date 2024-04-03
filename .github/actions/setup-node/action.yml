@@ -3,15 +3,29 @@ description: Setup Node and tools
 
 inputs:
   node-version:
-    default: "20"
+    # 18 is the minimum supported
+    default: "20.x"
     description: "Node version"
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-node@v4
+    - name: Enable Corepack before setting up Node
+      run: |
+        corepack enable
+      shell: bash
+    - name: Install node
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-    - shell: bash
+    - name: Check versions
+      shell: bash
       run: |
         node --version
         yarn --version
+        yarn set version 4.1.1 --yarn-path
+        rm -rf package.json
+        yarn --version
+        
+        
+        
+        
