@@ -24,9 +24,8 @@ jobs:
       - name: "Release package"
         run: |
           cd ragstack-ai-ts
+          yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
           yarn run release:publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
