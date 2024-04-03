@@ -29,4 +29,5 @@ runs:
         #yarn plugin import version
         rm -f ~/.yarn*
         yarn cache clean
+        yarn set version stable --yarn-path
         
