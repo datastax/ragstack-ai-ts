@@ -1,12 +1,20 @@
 {
   "name": "@datastax/ragstack-ai-ts",
   "description": "DataStax RAGStack TS",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "BUSL-1.1",
-  "readme": "../README.md",
   "author": {
     "name": "DataStax"
   },
+  "keywords": [
+    "llm",
+    "ai",
+    "rag",
+    "chain",
+    "embeddings",
+    "vectorstores",
+    "astradb"
+  ],
   "engines": {
     "node": ">=18"
   },
