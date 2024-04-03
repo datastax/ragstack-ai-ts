@@ -12,6 +12,9 @@ runs:
     - name: Enable Corepack before setting up Node
       run: |
         corepack enable
+        echo "Corepack enabled"
+        yarn --version
+
       shell: bash
     - name: Install node
       uses: actions/setup-node@v4
@@ -24,5 +27,4 @@ runs:
       run: |
         echo "Checking versions"
         node --version
-        yarn plugin import version
         yarn --version
