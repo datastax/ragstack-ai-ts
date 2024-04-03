@@ -38,7 +38,7 @@ jobs:
           pwd
           git status
           cd ragstack-ai-ts-e2e-tests
-          yarn install
+          YARN_ENABLE_HARDENED_MODE=0 yarn install --immutable
           yarn run lint
       - uses: dorny/paths-filter@v2
         id: filter

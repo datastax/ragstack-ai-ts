@@ -105,14 +105,14 @@ jobs:
         run: |
           if [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
             cd ragstack-ai-ts-e2e-tests
-            yarn install
+            YARN_ENABLE_HARDENED_MODE=0 yarn install
             yarn run test
           elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
             cd ragstack-ai-ts-e2e-tests
             rm -rf package.json
             mv package.langchain.json package.json
             cat package.json | jq '.dependencies'
-            yarn install
+            YARN_ENABLE_HARDENED_MODE=0 yarn install
             yarn upgrade --latest
             yarn run test
           else
