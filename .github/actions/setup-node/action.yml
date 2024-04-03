@@ -28,3 +28,4 @@ runs:
         node --version
         yarn --version
         #yarn plugin import version
+        rm -f ~/.yarn*
