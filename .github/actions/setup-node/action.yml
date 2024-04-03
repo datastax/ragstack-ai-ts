@@ -21,4 +21,5 @@ runs:
     - shell: bash
       run: |
         node --version
+        yarn plugin import version
         yarn --version
