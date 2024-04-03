@@ -29,7 +29,7 @@ runs:
         #yarn plugin import version
         rm -f ~/.yarn*
         yarn cache clean
-        corepack use yarn@4.1.1
+        yarn set version stable --yarn-path
         yarn -v
         cd ragstack-ai-ts
         yarn set version $(yarn -v)
