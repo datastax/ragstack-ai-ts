@@ -23,7 +23,9 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "jest"
+    "test": "jest",
+    "release:set-version": "yarn -v && yarn plugin import version && yarn version $NEW_VERSION",
+    "release:publish": "yarn -v && yarn npm publish --access public"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
@@ -44,5 +46,5 @@
     "typescript": "^5.3.3",
     "typescript-eslint": "^7.0.2"
   },
-  "packageManager": "yarn@0.1.0"
+  "packageManager": "yarn@3.8.1"
 }

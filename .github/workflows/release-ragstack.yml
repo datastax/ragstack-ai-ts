@@ -21,7 +21,9 @@ jobs:
         run: |
           cd ragstack-ai-ts
           yarn install --immutable
-      - run: yarn npm publish
+      - run: |
+          cd ragstack-ai-ts
+          yarn run release:publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
