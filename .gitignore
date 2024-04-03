@@ -134,7 +134,6 @@ creds.json
 .DS_Store
 build.zip
 
-yarn.lock
 package-lock.json
 
 junit.xml
