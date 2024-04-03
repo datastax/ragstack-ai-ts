@@ -57,5 +57,6 @@
     "cassandra-driver": "*",
     "langchain": "*",
     "langsmith": "*"
-  }
+  },
+  "packageManager": "yarn@4.1.1"
 }
