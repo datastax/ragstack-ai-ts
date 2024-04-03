@@ -27,19 +27,18 @@ jobs:
       - uses: actions/checkout@v4
       - name: "Setup: Node"
         uses: ./.github/actions/setup-node
-      - name: Lint
+      - name: Install and run unit tests
         run: |
-          set -ex
           cd ragstack-ai-ts
           yarn install
           yarn run lint
-          cd ../ragstack-ai-ts-e2e-tests
-          yarn install
-          yarn run lint
-      - name: Unit tests
-        run: |
-          cd ragstack-ai-ts
           yarn run test
+      - name: Install E2E tests
+        run: |
+          git status
+          cd ragstack-ai-ts-e2e-tests
+          yarn run install
+          yarn run lint
       - uses: dorny/paths-filter@v2
         id: filter
         with:
