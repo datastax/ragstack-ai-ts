@@ -24,7 +24,7 @@ runs:
     - name: Check versions
       shell: bash
       run: |
-        yarn set version stable
-        echo "Checking versions"
+        yarn set version 3.x
         node --version
         yarn --version
+        yarn plugin import version
