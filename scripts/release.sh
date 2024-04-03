@@ -1,6 +1,7 @@
 #!/bin/bash
+# NOTE: this script is compatible with Yarn 4.x
 set -e
-version=$1
+version=$11
 if [ -z "$version" ]; then
     echo "Usage: $0 <version>"
     exit 1
@@ -16,7 +17,7 @@ git checkout main
 git pull
 echo ":: Bumping version to $version"
 cd ragstack-ai-ts
-yarn version --new-version $version
+yarn set version $version
 cd ..
 git commit -am "Release $version"
 git tag $tag
