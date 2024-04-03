@@ -1,7 +1,7 @@
 #!/bin/bash
 # NOTE: this script is compatible with Yarn 4.x
 set -e
-version=$11
+version=$1
 if [ -z "$version" ]; then
     echo "Usage: $0 <version>"
     exit 1
