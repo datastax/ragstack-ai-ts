@@ -3,18 +3,15 @@ description: Setup Node and tools
 
 inputs:
   node-version:
+    # 18 is the minimum supported
     default: "20.x"
     description: "Node version"
 runs:
   using: "composite"
   steps:
-    # This hell is described here: https://github.com/actions/setup-node/issues/899
     - name: Enable Corepack before setting up Node
       run: |
-        yarn --version
         corepack enable
-        echo "Corepack enabled"
-
       shell: bash
     - name: Install node
       uses: actions/setup-node@v4
@@ -26,16 +23,7 @@ runs:
         echo "Checking versions"
         node --version
         yarn --version
-        #yarn plugin import version
-        rm -f ~/.yarn*
-        yarn cache clean
-        yarn set version stable --yarn-path
-        yarn -v
-#        cd ragstack-ai-ts
-#        yarn set version $(yarn -v) --only-if-needed
-#        cd ../ragstack-ai-ts-e2e-tests
-#        yarn set version $(yarn -v) --only-if-needed
-        
+        yarn set version 4.1.1 --yarn-path        
         
         
         
