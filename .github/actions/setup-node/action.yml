@@ -11,10 +11,10 @@ runs:
     # This hell is described here: https://github.com/actions/setup-node/issues/899
     - name: Enable Corepack before setting up Node
       run: |
-        corepack enable
-        echo "Corepack enabled"
         yarn --version
         npm uninstall -g yarn
+        corepack enable
+        echo "Corepack enabled"
 
       shell: bash
     - name: Install node
@@ -24,6 +24,7 @@ runs:
     - name: Check versions
       shell: bash
       run: |
+        yarn set version stable
         echo "Checking versions"
         node --version
         yarn --version
