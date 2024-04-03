@@ -3,7 +3,7 @@ description: Setup Node and tools
 
 inputs:
   node-version:
-    default: "20"
+    default: "20.x"
     description: "Node version"
 runs:
   using: "composite"
@@ -16,6 +16,7 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
+        cache: 'yarn'
     - shell: bash
       run: |
         node --version
