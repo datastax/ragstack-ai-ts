@@ -1481,7 +1481,7 @@ __metadata:
 
 "@datastax/ragstack-ai-ts@file:../ragstack-ai-ts::locator=%40datastax%2Fragstack-ai-ts-tests%40workspace%3A.":
   version: 0.1.0
-  resolution: "@datastax/ragstack-ai-ts@file:../ragstack-ai-ts#../ragstack-ai-ts::hash=3724af&locator=%40datastax%2Fragstack-ai-ts-tests%40workspace%3A."
+  resolution: "@datastax/ragstack-ai-ts@file:../ragstack-ai-ts#../ragstack-ai-ts::hash=a92e5a&locator=%40datastax%2Fragstack-ai-ts-tests%40workspace%3A."
   dependencies:
     "@datastax/astra-db-ts": "npm:0.1.4"
     "@langchain/azure-openai": "npm:0.0.2"
@@ -1491,7 +1491,7 @@ __metadata:
     cassandra-driver: "npm:4.7.2"
     langchain: "npm:0.1.23"
     langsmith: "npm:0.1.8"
-  checksum: 10c0/32dc43e800aa2353edf461421e54bdd0e844719ce58e4530544ab45baa01352c201ae1d969f935b05dcbbe498b577d3c015c677982fcf4965e9dfc3c5c26e056
+  checksum: 10c0/9b5f4d38aabc4803513b28f3500301180d3dd82accf1dd0a34e57eb006277a29f3be087d252acff0cda0bf5f3279654fa9e8d9f328dfd05e2d32aa12247da30f
   languageName: node
   linkType: hard
 
