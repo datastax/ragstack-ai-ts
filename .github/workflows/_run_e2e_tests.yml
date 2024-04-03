@@ -105,7 +105,7 @@ jobs:
         run: |
           if [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
             cd ragstack-ai-ts-e2e-tests
-            yarn install --immutable
+            yarn install
             yarn run test
           elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
             cd ragstack-ai-ts-e2e-tests

@@ -34,7 +34,8 @@ jobs:
           yarn install --immutable
           yarn run lint
           cd ../ragstack-ai-ts-e2e-tests
-          yarn install --immutable
+          # no immutable since we need to install the latest version of the local package and hash could change
+          yarn install
           yarn run lint
       - name: Unit tests
         run: |
