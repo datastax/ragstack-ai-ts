@@ -36,6 +36,6 @@ jobs:
         id: release-number
         shell: bash
         run: |
-          echo "release-number=$(echo ${{ github.ref }} | sed -e 's/refs\/tags\/ragstack-ai-//')" >> $GITHUB_OUTPUT
+          echo "release-number=$(echo ${{ github.ref }} | sed -e 's/refs\/tags\/ragstack-ai-ts-//')" >> $GITHUB_OUTPUT
 
       # TODO: build docker image
