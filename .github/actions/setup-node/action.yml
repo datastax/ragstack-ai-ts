@@ -30,4 +30,5 @@ runs:
         rm -f ~/.yarn*
         yarn cache clean
         yarn set version stable --yarn-path
+        yarn -v
         
