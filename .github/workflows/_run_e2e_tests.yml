@@ -103,6 +103,7 @@ jobs:
           UNSTRUCTURED_API_KEY: "${{ secrets.E2E_TESTS_UNSTRUCTURED_API_KEY }}"
           UNSTRUCTURED_API_URL: "${{ secrets.E2E_TESTS_UNSTRUCTURED_API_URL }}"
         run: |
+          export YARN_ENABLE_HARDENED_MODE=0 
           if [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
             cd ragstack-ai-ts-e2e-tests
             YARN_ENABLE_HARDENED_MODE=0 yarn install
@@ -112,7 +113,7 @@ jobs:
             rm -rf package.json
             mv package.langchain.json package.json
             cat package.json | jq '.dependencies'
-            YARN_ENABLE_HARDENED_MODE=0 yarn install
+            yarn install
             yarn upgrade --latest
             yarn run test
           else
