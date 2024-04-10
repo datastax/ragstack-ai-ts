@@ -21,7 +21,6 @@ runs:
       shell: bash
       run: |
         node --version
-        yarn --version
         yarn set version berry
         yarn --version
         
