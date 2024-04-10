@@ -105,9 +105,7 @@ jobs:
         run: |
           export YARN_ENABLE_HARDENED_MODE=0 
           if [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
-            cd packages/ragstack-ai-ts-e2e-tests
-            YARN_ENABLE_HARDENED_MODE=0 yarn install
-            yarn run test
+            yarn workspace @datastax/ragstack-ai-ts-e2e-tests test
           elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
             cd packages/ragstack-ai-ts-e2e-tests
             rm -rf package.json

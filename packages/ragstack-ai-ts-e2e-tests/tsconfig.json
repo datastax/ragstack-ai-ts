@@ -2,7 +2,6 @@
   "extends": "@tsconfig/recommended",
   "compilerOptions": {
     "outDir": "../dist",
-    "rootDir": "./src",
     "target": "ES2021",
     "lib": [
       "ES2021",
@@ -15,8 +14,6 @@
     "declaration": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-//    "noUnusedLocals": true,
-//    "noUnusedParameters": true,
     "useDefineForClassFields": true,
     "strictPropertyInitialization": false,
     "strict": true

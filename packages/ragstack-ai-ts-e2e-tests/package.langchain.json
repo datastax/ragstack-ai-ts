@@ -1,5 +1,6 @@
 {
-  "name": "@datastax/ragstack-ai-ts-tests",
+  "private": true,
+  "name": "@datastax/ragstack-ai-ts-e2e-tests",
   "version": "0.0.1",
   "license": "MIT",
   "author": {
@@ -20,9 +21,7 @@
     "langsmith": "*"
   },
   "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "yarn run -T jest"
   },
   "devDependencies": {
     "@aws-crypto/sha256-js": "^5.2.0",

@@ -11,6 +11,7 @@ import {randomUUID} from "node:crypto";
 import {CassandraLibArgs, CassandraStore} from "@langchain/community/vectorstores/cassandra";
 import {CassandraChatMessageHistory} from "@langchain/community/stores/message/cassandra";
 import {Client} from "cassandra-driver";
+import {BaseChatModel} from "@langchain/core/language_models/chat_models";
 
 
 export interface Skippable {
@@ -104,9 +105,9 @@ export class EnvDependantEmbeddings extends EnvDependantSkippable implements Emb
 
 export class EnvDependantLLM extends EnvDependantSkippable implements LLMSupplier {
     private readonly llmName: string;
-    private readonly supplier: () => BaseLanguageModel;
+    private readonly supplier: () => BaseChatModel;
 
-    constructor(env: string | string[], name: string, supplier: () => BaseLanguageModel) {
+    constructor(env: string | string[], name: string, supplier: () => BaseChatModel) {
         super(env)
         this.llmName = name
         this.supplier = supplier
@@ -116,7 +117,7 @@ export class EnvDependantLLM extends EnvDependantSkippable implements LLMSupplie
         return this.llmName;
     }
 
-    getLLM(): BaseLanguageModel {
+    getLLM(): BaseChatModel {
         return this.supplier();
     }
 }
