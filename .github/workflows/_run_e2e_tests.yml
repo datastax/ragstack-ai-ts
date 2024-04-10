@@ -105,11 +105,11 @@ jobs:
         run: |
           export YARN_ENABLE_HARDENED_MODE=0 
           if [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
-            cd ragstack-ai-ts-e2e-tests
+            cd packages/ragstack-ai-ts-e2e-tests
             YARN_ENABLE_HARDENED_MODE=0 yarn install
             yarn run test
           elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
-            cd ragstack-ai-ts-e2e-tests
+            cd packages/ragstack-ai-ts-e2e-tests
             rm -rf package.json
             mv package.langchain.json package.json
             cat package.json | jq '.dependencies'
@@ -135,7 +135,7 @@ jobs:
             commit_ref=$(git rev-parse --short HEAD)
             echo "commit-url=https://github.com/datastax/ragstack-ai-ts/commits/${commit_ref}" >> $GITHUB_OUTPUT
           elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
-            cd ragstack-ai-ts-e2e-tests
+            cd packages/ragstack-ai-ts-e2e-tests
             langchain_version=$(grep "langchain@npm" yarn.lock | head -1 | awk '{split($0,a,":"); print a[2]}' | tr -d '\"')
             echo "commit-url=https://github.com/langchain-ai/langchainjs/releases/tag/${langchain_version}" >> $GITHUB_OUTPUT
           fi

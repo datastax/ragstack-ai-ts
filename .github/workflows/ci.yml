@@ -29,15 +29,13 @@ jobs:
         uses: ./.github/actions/setup-node
       - name: Install and run unit tests
         run: |
-          cd ragstack-ai-ts
+          cd packages/ragstack-ai-ts
           yarn install
           yarn run lint
           yarn run test
       - name: Install E2E tests
         run: |
-          pwd
-          git status
-          cd ragstack-ai-ts-e2e-tests
+          cd packages/ragstack-ai-ts-e2e-tests
           export YARN_ENABLE_HARDENED_MODE=0
           yarn install
           yarn run lint

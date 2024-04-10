@@ -9,7 +9,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@datastax/ragstack-ai-ts": "file:../ragstack-ai-ts"
+    "@datastax/ragstack-ai-ts": "workspace:^"
   },
   "scripts": {
     "lint": "eslint .",
