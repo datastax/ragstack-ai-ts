@@ -17,13 +17,5 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-    - name: Check versions
-      shell: bash
-      run: |
-        node --version
-        yarn set version berry
-        yarn --version
-        
-        
         
         
