@@ -40,4 +40,7 @@ jobs:
         run: |
           echo "release-number=$(echo ${{ github.ref }} | sed -e 's/refs\/tags\/ragstack-ai-ts-//')" >> $GITHUB_OUTPUT
 
-      # TODO: build docker image
+      - name: Update API reference
+        uses: ./.github/actions/deploy-api-reference
+        with:
+          ragstack-version: ${{ steps.release-number.outputs.release-number }}
