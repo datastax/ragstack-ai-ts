@@ -32,6 +32,5 @@
     "test": "yarn run -T jest",
     "release:set-version": "yarn -v && yarn version $NEW_VERSION",
     "release:publish": "yarn -v && yarn npm publish --access public"
-  },
-  "packageManager": "yarn@4.1.1"
+  }
 }
