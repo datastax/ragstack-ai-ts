@@ -1,6 +1,7 @@
 {
   "name": "ragstack-ai-ts-parent",
   "packageManager": "yarn@4.1.1",
+  "private": true,
   "workspaces": [
     "packages/*"
   ],
