@@ -20,9 +20,10 @@ jobs:
       - name: "Install"
         run: yarn
       - name: "Release package"
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd packages/ragstack-ai-ts
-          yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
           yarn run release:publish
 
       - name: Create GitHub Release
