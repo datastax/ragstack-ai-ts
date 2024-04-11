@@ -5,13 +5,13 @@
     "module": "commonjs",
     "lib": ["es2021"],
     "allowJs": true,
-    "outDir": "build",
+    "outDir": "dist",
     "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
     "types": ["node", "jest"],
     "skipLibCheck": true
   },
-  "include": ["tests/**/*"],
+  "include": ["src/**/*"],
   "files": ["../../node_modules/jest-expect-message/types/index.d.ts"]
 }
