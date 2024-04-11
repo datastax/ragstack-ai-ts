@@ -1432,6 +1432,8 @@ __metadata:
     cross-spawn: "npm:^7.0.3"
     detect-package-manager: "npm:^3.0.1"
     picocolors: "npm:^1.0.0"
+  bin:
+    ragstack-ai: dist/index.js
   languageName: unknown
   linkType: soft
 

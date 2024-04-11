@@ -99,7 +99,6 @@ async function executeInstall(version: string, options: {
     console.log(`Setting up RAGStack dependencies for ${cyan(appName)}.`)
 
     const remotePackageJson = await getRemotePackageJson(`@datastax/ragstack-ai-ts${versionForNPM}`);
-    console.log("aa")
     const ragstackJson = JSON.parse(remotePackageJson as string)
     version = version || ragstackJson.version
     console.log(`Installing @datastax/ragstack-ai-ts@${green(version)}`)
