@@ -19,6 +19,9 @@
     "node": ">=18"
   },
   "main": "dist/index.js",
+  "bin": {
+    "ragstack-ai": "dist/index.js"
+  },
   "files": [
     "/dist"
   ],
