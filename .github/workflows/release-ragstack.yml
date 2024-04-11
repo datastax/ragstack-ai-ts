@@ -18,9 +18,7 @@ jobs:
         uses: ./.github/actions/setup-node
 
       - name: "Install"
-        run: |
-          cd packages/ragstack-ai-ts
-          yarn install --immutable
+        run: yarn
       - name: "Release package"
         run: |
           cd packages/ragstack-ai-ts
