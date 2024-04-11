@@ -16,7 +16,8 @@ parsed.resolutions = {
   ...(parsed.resolutions || {}),
   ...deps
 }
-fs.writeFileSync(parentJson, JSON.stringify(parsed, null,2))
+const result = JSON.stringify(parsed, null, 2) + "\n";
+fs.writeFileSync(parentJson, result)
 console.log("Fixed resolutions in package.json")
 
 
