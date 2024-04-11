@@ -25,6 +25,7 @@ import {BaseLanguageModel} from "@langchain/core/language_models/base";
 import {AIMessage, HumanMessage} from "@langchain/core/messages";
 import {expect} from "@jest/globals";
 import {randomUUID} from "node:crypto";
+import {BaseChatModel} from "@langchain/core/language_models/chat_models";
 
 
 function vertexSetup() {
@@ -284,7 +285,7 @@ describe("Multimodal RAG", () => {
     const geminiLLM = new EnvDependantLLM(
         ["GOOGLE_API_KEY"],
         "vertex gemini pro",
-        () => new ChatGoogleGenerativeAI({modelName: "gemini-pro-vision"}) as unknown as BaseLanguageModel
+        () => new ChatGoogleGenerativeAI({modelName: "gemini-pro-vision"})
     )
 
 

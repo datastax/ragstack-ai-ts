@@ -15,10 +15,10 @@ tag="ragstack-ai-ts-$version"
 git checkout main
 git pull
 echo ":: Bumping version to $version"
-cd ragstack-ai-ts
+cd packages/ragstack-ai-ts
 export NEW_VERSION=$version
 yarn run release:set-version
-cd ..
+cd ../..
 git commit -am "Release $version"
 git tag $tag
 git push origin main

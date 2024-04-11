@@ -81,8 +81,8 @@ jobs:
         if: ${{ inputs.run-tests }}
         env:
           VECTOR_DATABASE_TYPE: "${{ inputs.vector-database-type }}"
-          ASTRA_DB_TOKEN: "${{ secrets[inputs.astradb-token-secret-name] }}"
-          ASTRA_DB_ENDPOINT: "${{ steps.astra-db.outputs.db_endpoint }}"
+          ASTRA_DB_APPLICATION_TOKEN: "${{ secrets[inputs.astradb-token-secret-name] }}"
+          ASTRA_DB_API_ENDPOINT: "${{ steps.astra-db.outputs.db_endpoint }}"
           ASTRA_DB_ID: "${{ steps.astra-db.outputs.db_id }}"
           ASTRA_DB_ENV: "${{ inputs.astradb-env }}"
           OPEN_AI_KEY: "${{ secrets.E2E_TESTS_OPEN_AI_KEY }}"
@@ -105,17 +105,13 @@ jobs:
         run: |
           export YARN_ENABLE_HARDENED_MODE=0 
           if [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
-            cd ragstack-ai-ts-e2e-tests
-            YARN_ENABLE_HARDENED_MODE=0 yarn install
-            yarn run test
-          elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
-            cd ragstack-ai-ts-e2e-tests
-            rm -rf package.json
-            mv package.langchain.json package.json
-            cat package.json | jq '.dependencies'
             yarn install
-            yarn upgrade --latest
-            yarn run test
+            yarn workspace @datastax/ragstack-ai-ts test:integration
+          elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
+            yarn up "*"
+            node fix-resolutions.js
+            cat package.json
+            yarn workspace @datastax/ragstack-ai-ts test:integration
           else
             echo "Unknown suite name: ${{ inputs.suite-name }}"
             exit 1
@@ -125,7 +121,7 @@ jobs:
         if: ${{ always() }}
         uses: ./.github/actions/add-report-to-github-summary
         with:
-          tests-path: "ragstack-ai-ts-e2e-tests"
+          tests-path: "packages/ragstack-ai-ts"
 
       - name: Compute info
         if: ${{ always() }}
@@ -135,7 +131,6 @@ jobs:
             commit_ref=$(git rev-parse --short HEAD)
             echo "commit-url=https://github.com/datastax/ragstack-ai-ts/commits/${commit_ref}" >> $GITHUB_OUTPUT
           elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
-            cd ragstack-ai-ts-e2e-tests
             langchain_version=$(grep "langchain@npm" yarn.lock | head -1 | awk '{split($0,a,":"); print a[2]}' | tr -d '\"')
             echo "commit-url=https://github.com/langchain-ai/langchainjs/releases/tag/${langchain_version}" >> $GITHUB_OUTPUT
           fi
@@ -144,7 +139,7 @@ jobs:
         if: ${{ always() && inputs.deploy-to-slack }}
         uses: ./.github/actions/deploy-slack-report
         with:
-          from-report-file: "ragstack-ai-ts-e2e-tests/failed-tests-report.txt"
+          from-report-file: "packages/ragstack-ai-ts/failed-tests-report.txt"
           type: "${{ inputs.title }}"
           outcome: ${{ steps.e2e-tests.outcome }}
           commit-url: "${{ steps.info.outputs.commit-url }}"
@@ -156,7 +151,7 @@ jobs:
         with:
           report-type: tests
           token: ${{ secrets.TESTSPACE_TOKEN }}
-          report-file: ragstack-ai-ts-e2e-tests/junit.xml
+          report-file: packages/ragstack-ai-ts/junit.xml
           space: ${{ inputs.testspace-space }}
 
       - name: Cleanup AstraDB

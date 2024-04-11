@@ -17,15 +17,5 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-    - name: Check versions
-      shell: bash
-      run: |
-        node --version
-        yarn --version
-        yarn set version 4.1.1 --yarn-path
-        rm -rf package.json
-        yarn --version
-        
-        
         
         

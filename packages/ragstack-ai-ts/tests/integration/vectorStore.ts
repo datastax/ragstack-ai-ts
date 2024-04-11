@@ -8,6 +8,10 @@ import {GenericContainer, StartedTestContainer, Wait} from "testcontainers";
 
 
 export class VectorDatabaseTypeNotSupported extends Error {
+    constructor(message: string) {
+        super(message)
+        Object.setPrototypeOf(this, VectorDatabaseTypeNotSupported.prototype);
+    }
 }
 
 export interface VectorStoreHandler {
@@ -29,8 +33,9 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
     bundleUrlTemplate: string | undefined;
 
     constructor() {
-        this.token = getRequiredEnv("ASTRA_DB_TOKEN")
-        this.endpoint = getRequiredEnv("ASTRA_DB_ENDPOINT")
+        this.token = getRequiredEnv("ASTRA_DB_APPLICATION_TOKEN")
+        console.log(this.token)
+        this.endpoint = getRequiredEnv("ASTRA_DB_API_ENDPOINT")
         this.databaseId = getRequiredEnv("ASTRA_DB_ID")
         const env = (process.env["ASTRA_DB_ENV"] || "prod").toLowerCase()
         this.bundleUrlTemplate = env !== "prod" ? "https://api.dev.cloud.datastax.com/v2/databases/{database_id}/secureBundleURL?all=true" : undefined
