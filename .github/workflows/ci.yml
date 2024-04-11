@@ -40,6 +40,9 @@ jobs:
         run: yarn lint
       - name: Run unit tests
         run: yarn workspace @datastax/ragstack-ai-ts test:unit
+      - name: Run unit tests (CLI)
+        run: |
+          yarn workspace @datastax/ragstack-ai-cli test
       - uses: dorny/paths-filter@v2
         id: filter
         with:

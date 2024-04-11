@@ -1,0 +1,33 @@
+name: Release RAGStack CLI package
+
+on:
+  push:
+    tags:
+      - "ragstack-ai-cli-*"
+
+jobs:
+  release:
+    name: Release package
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: "Setup: Node"
+        uses: ./.github/actions/setup-node
+
+      - name: "Install"
+        run: yarn
+      - name: "Release package"
+        run: |
+          cd packages/ragstack-ai-cli
+          yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
+          yarn run release:publish
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generateReleaseNotes: true
+          prerelease: false
