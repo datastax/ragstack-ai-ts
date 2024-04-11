@@ -85,7 +85,6 @@ export async function addOverrides(
 ): Promise<string> {
 
     if (packageManager === 'yarn') {
-        // not berry, proceed manually
         const packageJsonPath = path.resolve(applicationPath, "package.json");
         const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"))
         packageJson.resolutions = packageJson.resolutions || {}

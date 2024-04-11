@@ -40,13 +40,6 @@ export async function main(mainOptions: { args?: string[], handleSigTerm: () => 
 `
         )
         .option(
-            '--use-pnpm',
-            `
-
-  Explicitly tell the CLI to bootstrap the application using pnpm
-`
-        )
-        .option(
             '--use-yarn',
             `
 
