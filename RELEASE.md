@@ -4,7 +4,7 @@ In order to cut a RAGStack release, you only need to run the `scripts/release.sh
 Ensure you have yarn installed and available in your path.
 
 ```bash
-scripts/release.sh 0.3.0
+scripts/release-ragstack-ai-ts.sh 0.3.0
 ```
 
 ## Release notes
