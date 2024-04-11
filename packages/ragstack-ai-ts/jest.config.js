@@ -5,6 +5,7 @@ module.exports = {
   testEnvironment: "./jest.env.js",
   testTimeout: 180000,
   maxConcurrency: 1,
+  setupFiles: ["dotenv/config"],
   setupFilesAfterEnv: ["jest-expect-message"],
   detectOpenHandles: true,
   reporters: ["default",
