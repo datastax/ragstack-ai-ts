@@ -28,8 +28,15 @@ jobs:
       - name: "Setup: Node"
         uses: ./.github/actions/setup-node
       - name: Install
+        run: yarn
+      - name: Build
         run: |
-          yarn
+          yarn workspace @datastax/ragstack-ai-ts build
+          yarn workspace @datastax/ragstack-ai-cli build
+          yarn workspace @datastax/ragstack-ai-ts set-lib-version
+          yarn workspace @datastax/ragstack-ai-cli set-lib-version
+      - name: Check working directory
+        run: |
           if [ ! -z "$(git status --porcelain)" ]; then
             git status
             git diff
