@@ -22,7 +22,18 @@
   "scripts": {
     "lint": "eslint ",
     "lint:fix": "eslint --fix .",
-    "jest": "cd $INIT_CWD && cross-env NODE_OPTIONS=--experimental-vm-modules jest"
+    "jest": "cd $INIT_CWD && cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "postinstall": "node fix-resolutions.js"
   },
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.1.1",
+  "resolutions": {
+    "@datastax/astra-db-ts": "0.1.4",
+    "@langchain/azure-openai": "0.0.2",
+    "@langchain/community": "0.0.33",
+    "@langchain/core": "0.1.36",
+    "@langchain/openai": "0.0.26",
+    "cassandra-driver": "4.7.2",
+    "langchain": "0.1.23",
+    "langsmith": "0.1.8"
+  }
 }

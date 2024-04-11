@@ -28,51 +28,56 @@ jobs:
       - name: "Setup: Node"
         uses: ./.github/actions/setup-node
       - name: Install
-        run: yarn
+        run: |
+          yarn
+          if [ ! -z "$(git status --porcelain)" ]; then
+            git status
+            git diff
+            echo "The working directory is dirty. Please ensure the 'install' command won't change any source file."
+            exit 1
+          fi
       - name: Lint
         run: yarn lint
       - name: Run unit tests
-        run: yarn workspace @datastax/ragstack-ai-ts test
-      - name: Run e2e tests (to remove)
-        run: yarn workspace @datastax/ragstack-ai-ts-e2e-tests test
+        run: yarn workspace @datastax/ragstack-ai-ts test:unit
       - uses: dorny/paths-filter@v2
         id: filter
         with:
           filters: ./.github/changes-filter.yaml
 
-#  ragstack-dev-dse-tests:
-#    name: "RAGStack dev / DSE"
-#    needs: ["preconditions"]
-#    if: ${{ needs.preconditions.outputs.is-scheduled == 'true' || needs.preconditions.outputs.e2e_tests == 'true' }}
-#    uses: ./.github/workflows/_run_e2e_tests.yml
-#    secrets: inherit
-#    with:
-#      title: "RAGStack dev / DSE"
-#      suite-name: "ragstack"
-#      astradb: false
-#      vector-database-type: "local-cassandra"
-#      deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-#      deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-#      testspace-space: "RAGStack test suite - RAGStack dev - DSE"
-#
-#  ragstack-dev-astradev-tests:
-#    name: "RAGStack dev / AstraDB dev"
-#    needs: ["preconditions"]
-#    if: ${{ needs.preconditions.outputs.is-scheduled == 'true' || needs.preconditions.outputs.e2e_tests == 'true' }}
-#    uses: ./.github/workflows/_run_e2e_tests.yml
-#    secrets: inherit
-#    with:
-#      title: "RAGStack dev / AstraDB dev"
-#      suite-name: "ragstack"
-#      astradb: true
-#      astradb-token-secret-name: "E2E_TESTS_ASTRA_DEV_DB_TOKEN"
-#      astradb-env: "DEV"
-#      astradb-region: "${{ needs.preconditions.outputs.astradb-dev-region }}"
-#      astradb-cloud: "${{ needs.preconditions.outputs.astradb-dev-cloud }}"
-#      vector-database-type: "astradb"
-#      deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-#      deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
-#      testspace-space: "RAGStack test suite - RAGStack dev - AstraDB"
+  ragstack-dev-dse-tests:
+    name: "RAGStack dev / DSE"
+    needs: ["preconditions"]
+    if: ${{ needs.preconditions.outputs.is-scheduled == 'true' || needs.preconditions.outputs.e2e_tests == 'true' }}
+    uses: ./.github/workflows/_run_e2e_tests.yml
+    secrets: inherit
+    with:
+      title: "RAGStack dev / DSE"
+      suite-name: "ragstack"
+      astradb: false
+      vector-database-type: "local-cassandra"
+      deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
+      deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
+      testspace-space: "RAGStack test suite - RAGStack dev - DSE"
+
+  ragstack-dev-astradev-tests:
+    name: "RAGStack dev / AstraDB dev"
+    needs: ["preconditions"]
+    if: ${{ needs.preconditions.outputs.is-scheduled == 'true' || needs.preconditions.outputs.e2e_tests == 'true' }}
+    uses: ./.github/workflows/_run_e2e_tests.yml
+    secrets: inherit
+    with:
+      title: "RAGStack dev / AstraDB dev"
+      suite-name: "ragstack"
+      astradb: true
+      astradb-token-secret-name: "E2E_TESTS_ASTRA_DEV_DB_TOKEN"
+      astradb-env: "DEV"
+      astradb-region: "${{ needs.preconditions.outputs.astradb-dev-region }}"
+      astradb-cloud: "${{ needs.preconditions.outputs.astradb-dev-cloud }}"
+      vector-database-type: "astradb"
+      deploy-to-slack: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
+      deploy-to-testspace: ${{ needs.preconditions.outputs.is-scheduled == 'true' }}
+      testspace-space: "RAGStack test suite - RAGStack dev - AstraDB"
 #
 #  langchain-latest-dse-tests:
 #    name: "LangChain latest / DSE"

@@ -1,7 +1,6 @@
 import {AstraDBVectorStoreHandler, LocalCassandraVectorStoreHandler, VectorStoreHandler} from "./vectorStore";
 import {afterEach} from "@jest/globals";
 import * as fs from "fs";
-
 export class RequiredEnvNotSet extends Error {
     env: string;
 
