@@ -8,11 +8,11 @@ Looking for the Python version? Check out [ragstack](https://github.com/datastax
 
 - Yarn
     ```bash
-    yarn add @datastax/ragstack-ai-ts
+    yarn add @datastax/ragstack-ai
     ```
 - NPM
     ```bash
-    npm install @datastax/ragstack-ai-ts
+    npm install @datastax/ragstack-ai
     ```
 
 ## Documentation

@@ -91,12 +91,12 @@ async function executeInstall(version: string, options: {
     const appName = packageJson.name
     console.log(`Setting up RAGStack dependencies for ${cyan(appName)}.`)
 
-    const remotePackageJson = await getRemotePackageJson(`@datastax/ragstack-ai-ts${versionForNPM}`);
+    const remotePackageJson = await getRemotePackageJson(`@datastax/ragstack-ai${versionForNPM}`);
     const ragstackJson = JSON.parse(remotePackageJson as string)
     version = version || ragstackJson.version
-    console.log(`Installing @datastax/ragstack-ai-ts@${green(version)}`)
+    console.log(`Installing @datastax/ragstack-ai@${green(version)}`)
 
-    await addDependencies(projectPath, packageManager, {"@datastax/ragstack-ai-ts": version}, false)
+    await addDependencies(projectPath, packageManager, {"@datastax/ragstack-ai": version}, false)
 
     const currentDeps = packageJson.dependencies || {}
     const rmDeps: Record<string, string> = {}

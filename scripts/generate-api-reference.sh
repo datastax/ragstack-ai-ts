@@ -9,7 +9,7 @@ if [ -z "$ragstack_version" ]; then
   exit 1
 fi
 
-langchain_version=$(curl -Ls "https://registry.npmjs.org/@datastax/ragstack-ai-ts/${ragstack_version}" | jq -r '.dependencies.langchain')
+langchain_version=$(curl -Ls "https://registry.npmjs.org/@datastax/ragstack-ai/${ragstack_version}" | jq -r '.dependencies.langchain')
 echo "langchain_version: $langchain_version"
 
 clone_lc() {

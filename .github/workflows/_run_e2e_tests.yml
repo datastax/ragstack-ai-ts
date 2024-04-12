@@ -106,12 +106,12 @@ jobs:
           export YARN_ENABLE_HARDENED_MODE=0 
           if [ "${{ inputs.suite-name == 'ragstack' }}" == "true" ]; then
             yarn install
-            yarn workspace @datastax/ragstack-ai-ts test:integration
+            yarn workspace @datastax/ragstack-ai test:integration
           elif [ "${{ inputs.suite-name == 'langchain' }}" == "true" ]; then
             yarn up "*"
             node fix-resolutions.js
             cat package.json
-            yarn workspace @datastax/ragstack-ai-ts test:integration
+            yarn workspace @datastax/ragstack-ai test:integration
           else
             echo "Unknown suite name: ${{ inputs.suite-name }}"
             exit 1
@@ -121,7 +121,7 @@ jobs:
         if: ${{ always() }}
         uses: ./.github/actions/add-report-to-github-summary
         with:
-          tests-path: "packages/ragstack-ai-ts"
+          tests-path: "packages/ragstack-ai"
 
       - name: Compute info
         if: ${{ always() }}
@@ -139,7 +139,7 @@ jobs:
         if: ${{ always() && inputs.deploy-to-slack }}
         uses: ./.github/actions/deploy-slack-report
         with:
-          from-report-file: "packages/ragstack-ai-ts/failed-tests-report.txt"
+          from-report-file: "packages/ragstack-ai/failed-tests-report.txt"
           type: "${{ inputs.title }}"
           outcome: ${{ steps.e2e-tests.outcome }}
           commit-url: "${{ steps.info.outputs.commit-url }}"
@@ -151,7 +151,7 @@ jobs:
         with:
           report-type: tests
           token: ${{ secrets.TESTSPACE_TOKEN }}
-          report-file: packages/ragstack-ai-ts/junit.xml
+          report-file: packages/ragstack-ai/junit.xml
           space: ${{ inputs.testspace-space }}
 
       - name: Cleanup AstraDB

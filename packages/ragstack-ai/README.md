@@ -20,11 +20,11 @@ RAGStack uses the [Astra DB Serverless (Vector) database](https://docs.datastax.
 
 - Yarn
     ```bash
-    yarn add @datastax/ragstack-ai-ts
+    yarn add @datastax/ragstack-ai
     ```
 - NPM
     ```bash
-    npm install @datastax/ragstack-ai-ts
+    npm install @datastax/ragstack-ai
     ```
 
 ## Documentation

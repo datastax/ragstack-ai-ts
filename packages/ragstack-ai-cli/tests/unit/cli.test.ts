@@ -27,7 +27,7 @@ describe("Test", () => {
         const parsed = JSON.parse(fs.readFileSync(packageJson, 'utf-8'))
         console.log("after json", parsed)
         expect(Object.keys(parsed.dependencies).length).toBe(1)
-        expect(parsed.dependencies["@datastax/ragstack-ai-ts"]).toBeTruthy()
+        expect(parsed.dependencies["@datastax/ragstack-ai"]).toBeTruthy()
         expect(Object.keys(parsed.devDependencies).length).toBe(8)
 
 

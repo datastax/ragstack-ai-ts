@@ -1437,9 +1437,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@datastax/ragstack-ai-ts@workspace:packages/ragstack-ai-ts":
+"@datastax/ragstack-ai@workspace:packages/ragstack-ai":
   version: 0.0.0-use.local
-  resolution: "@datastax/ragstack-ai-ts@workspace:packages/ragstack-ai-ts"
+  resolution: "@datastax/ragstack-ai@workspace:packages/ragstack-ai"
   dependencies:
     "@aws-crypto/sha256-js": "npm:^5.2.0"
     "@aws-sdk/client-bedrock-runtime": "npm:^3.525.0"
@@ -7120,9 +7120,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ragstack-ai-ts-parent@workspace:.":
+"ragstack-ai-parent@workspace:.":
   version: 0.0.0-use.local
-  resolution: "ragstack-ai-ts-parent@workspace:."
+  resolution: "ragstack-ai-parent@workspace:."
   dependencies:
     "@tsconfig/recommended": "npm:^1.0.3"
     "@types/jest": "npm:^29.5.12"

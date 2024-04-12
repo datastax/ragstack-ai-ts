@@ -4,7 +4,7 @@ const path = require("path")
 const parentJson = path.resolve("package.json")
 
 function getDeps() {
-  const packageJson = path.resolve("packages", "ragstack-ai-ts", "package.json")
+  const packageJson = path.resolve("packages", "ragstack-ai", "package.json")
   const parsed = JSON.parse(fs.readFileSync(packageJson))
   return parsed.dependencies
 }

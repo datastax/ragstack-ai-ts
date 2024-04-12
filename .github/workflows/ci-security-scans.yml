@@ -8,7 +8,7 @@ on:
     paths:
       - ".github/workflows/ci-security-scans.yml"
       - "scripts/**"
-      - "ragstack-ai-ts/**"
+      - "ragstack-ai/**"
     branches:
       - main
 
@@ -28,7 +28,7 @@ jobs:
         uses: ./.github/actions/setup-node
       - name: "Install"
         run: |
-          cd packages/ragstack-ai-ts
+          cd packages/ragstack-ai
           yarn install --immutable
 
       - name: Run Snyk to check for vulnerabilities
@@ -36,7 +36,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high --json-file-output=snyk-vuln.json --print-deps --all-projects --exclude=ragstack-ai-ts-e2e-tests
+          args: --severity-threshold=high --json-file-output=snyk-vuln.json --print-deps --all-projects
 
       - name: Move snyk vulnerabilities file
         if: ${{ always() }}
