@@ -1,13 +1,12 @@
 {
   "extends": "@tsconfig/recommended",
   "compilerOptions": {
-    "target": "es2021",
-    "module": "commonjs",
-    "lib": ["es2021"],
+    "target": "es2020",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "declaration": true,
     "rootDir": "src",
     "outDir": "dist",
-    "resolveJsonModule": true,
     "esModuleInterop": true
   },
   "include": ["src/**/*"]

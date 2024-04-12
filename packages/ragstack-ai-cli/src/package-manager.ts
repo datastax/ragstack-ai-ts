@@ -2,8 +2,8 @@
 import spawn from 'cross-spawn'
 import path from 'path'
 import fs from "fs";
-
-const {detect} = require("detect-package-manager");
+// @ts-ignore
+import {detect} from "detect-package-manager";
 
 export type PackageManager = 'npm' | 'yarn'
 

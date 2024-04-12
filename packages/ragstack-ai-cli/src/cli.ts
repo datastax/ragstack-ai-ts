@@ -1,15 +1,16 @@
 #!/usr/bin/env node
-import {cyan, green} from 'picocolors'
-import Commander from 'commander'
+
+import {Command} from 'commander'
 import path from 'path'
 import {
     addDependencies, addOverrides,
     getPackageManager,
     getRemotePackageJson,
     removeDependencies
-} from './package-manager'
+} from './package-manager.js'
 import fs from 'fs'
-import {LIB_VERSION} from "./version";
+import {LIB_VERSION} from "./version.js";
+import chalk from "chalk";
 
 
 export async function main(mainOptions: { args?: string[], handleSigTerm: () => void, onError: () => void }) {
@@ -18,7 +19,7 @@ export async function main(mainOptions: { args?: string[], handleSigTerm: () => 
     process.on('SIGINT', mainOptions.handleSigTerm)
     process.on('SIGTERM', mainOptions.handleSigTerm)
 
-    const command = new Commander.Command()
+    const command = new Command()
     command.name("ragstack-ai")
         .description("Manage RAGStack dependencies in your project")
         .version(LIB_VERSION)
@@ -68,7 +69,9 @@ export async function main(mainOptions: { args?: string[], handleSigTerm: () => 
     }
 }
 
-
+function log(msg: string) {
+    console.log(chalk.magenta("➤ ragstack-ai: ") + msg)
+}
 async function executeInstall(version: string, options: {
     path: string,
     useNpm: boolean,
@@ -79,22 +82,22 @@ async function executeInstall(version: string, options: {
     const projectPath = options.path || process.cwd()
     const packageJsonPath = path.join(projectPath, 'package.json')
     if (!fs.existsSync(packageJsonPath)) {
-        throw new Error(`\nPlease initialize the project at ${cyan(projectPath)} with your favourite package manager.`)
+        throw new Error(`\nPlease initialize the project at ${chalk.cyan(projectPath)} with your favourite package manager.`)
     }
     const packageManager = options.useNpm ? 'npm' : options.useYarn ? 'yarn' : await getPackageManager(projectPath)
-    console.log(`Using ${cyan(packageManager)} as the package manager.`)
+    log(`using ${chalk.cyan(packageManager)} as the package manager.`)
     let versionForNPM = version || ""
     if (versionForNPM) {
         versionForNPM = "@" + versionForNPM
     }
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'))
     const appName = packageJson.name
-    console.log(`Setting up RAGStack dependencies for ${cyan(appName)}.`)
+    log(`setting up ragstack dependencies for project ${chalk.cyan(appName)}.`)
 
     const remotePackageJson = await getRemotePackageJson(`@datastax/ragstack-ai${versionForNPM}`);
     const ragstackJson = JSON.parse(remotePackageJson as string)
     version = version || ragstackJson.version
-    console.log(`Installing @datastax/ragstack-ai@${green(version)}`)
+    log(`installing ${chalk.cyan("@datastax/ragstack-ai")} (${chalk.green(version)})`)
 
     await addDependencies(projectPath, packageManager, {"@datastax/ragstack-ai": version}, false)
 
@@ -107,23 +110,21 @@ async function executeInstall(version: string, options: {
         })
 
     if (rmDeps.length) {
-        console.log(`Removing dependencies ${formatDeps(rmDeps)}`)
+        log(`removing out of date dependencies:\n${formatDeps(rmDeps)}`)
         await removeDependencies(projectPath, packageManager, rmDeps)
     }
 
     if (Object.keys(ragstackJson.dependencies).length) {
-        console.log(`Adding dev dependencies:\n${formatDeps(ragstackJson.dependencies)}`)
+        log(`adding dev dependencies:\n${formatDeps(ragstackJson.dependencies)}`)
         await addDependencies(projectPath, packageManager, ragstackJson.dependencies, true)
+        log(`setting overrides:\n${formatDeps(ragstackJson.dependencies)}`)
         await addOverrides(projectPath, packageManager, ragstackJson.dependencies)
     }
-
-    console.log()
-    console.log(`${green('Done!')}`)
-
+    log(`${chalk.cyan('all done!')} 🎉`)
 }
 
 
 function formatDeps(deps: Record<string, string>) {
-    const depsStr = Object.keys(deps).map((key) => key + "@" + deps[key])
-    return `${cyan(depsStr.map(d => "- " + d).join('\n'))}`
+    const depsStr = Object.keys(deps).map((key) => `${chalk.cyan(key)} (${chalk.green(deps[key])})`)
+    return depsStr.map(d => "- " + d).join('\n')
 }
