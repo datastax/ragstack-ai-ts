@@ -11,7 +11,7 @@ on:
       - main
 
 concurrency:
-  group: ragstack-e2e-tests-${{ github.workflow }}-${{ github.ref }}
+  group: ragstack-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -50,6 +50,9 @@ jobs:
       - name: Run unit tests (CLI)
         run: |
           yarn workspace @datastax/ragstack-ai-cli test
+          cd packages/ragstack-ai-cli
+          npm link
+          ragstack-ai --version
       - uses: dorny/paths-filter@v2
         id: filter
         with:
