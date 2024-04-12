@@ -1,6 +1,6 @@
 # RAGStack (for Javascript/Typescript)
 [![Release Notes](https://img.shields.io/github/v/release/datastax/ragstack-ai-ts.svg)](https://github.com/datastax/ragstack-ai-ts/releases)
-![npm](https://img.shields.io/npm/dm/@datastax/ragstack-ai-ts)
+![npm](https://img.shields.io/npm/dm/@datastax/ragstack-ai)
 [![License: Business Source License](https://img.shields.io/badge/License-BSL-yellow.svg)](https://github.com/datastax/ragstack-ai/blob/main/LICENSE.txt)
 [![GitHub star chart](https://img.shields.io/github/stars/datastax/ragstack-ai-ts?style=social)](https://star-history.com/#datastax/ragstack-ai-ts)
 [![Tests Dashboard](https://img.shields.io/badge/Tests%20Dashboard-333)](https://ragstack-ai.testspace.com)
