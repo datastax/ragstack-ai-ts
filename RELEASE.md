@@ -8,4 +8,8 @@ scripts/release-ragstack-ai.sh 0.3.0
 ```
 
 ## Release notes
-TODO
+Generate the dependency table for the release notes:
+```bash
+node scripts/generate-changelog.js 0.3.0
+```
+and copy the output to the changelog page in the documentation.
