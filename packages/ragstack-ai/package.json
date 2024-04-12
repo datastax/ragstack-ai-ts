@@ -23,7 +23,7 @@
     "/dist"
   ],
   "dependencies": {
-    "@datastax/astra-db-ts": "0.1.4",
+    "@datastax/astra-db-ts": "1.0.0",
     "@langchain/azure-openai": "0.0.2",
     "@langchain/community": "0.0.33",
     "@langchain/core": "0.1.36",

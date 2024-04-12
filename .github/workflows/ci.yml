@@ -35,6 +35,7 @@ jobs:
           yarn workspace @datastax/ragstack-ai-cli build
           yarn workspace @datastax/ragstack-ai set-lib-version
           yarn workspace @datastax/ragstack-ai-cli set-lib-version
+          yarn check-resolutions
       - name: Check working directory
         run: |
           if [ ! -z "$(git status --porcelain)" ]; then
