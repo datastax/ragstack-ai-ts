@@ -1427,26 +1427,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@datastax/ragstack-ai-cli@workspace:packages/ragstack-ai-cli"
   dependencies:
-    "@datastax/astra-db-ts": "npm:0.1.4"
-    "@datastax/ragstack-ai": "npm:0.1.0"
-    "@langchain/azure-openai": "npm:0.0.2"
-    "@langchain/community": "npm:0.0.33"
-    "@langchain/core": "npm:0.1.36"
-    "@langchain/openai": "npm:0.0.26"
     "@types/cross-spawn": "npm:^6.0.6"
     "@types/prompts": "npm:^2.4.9"
-    cassandra-driver: "npm:4.7.2"
     chalk: "npm:^5.3.0"
     cross-spawn: "npm:^7.0.3"
     detect-package-manager: "npm:^3.0.1"
-    langchain: "npm:0.1.23"
-    langsmith: "npm:0.1.8"
   bin:
     ragstack-ai: dist/index.js
   languageName: unknown
   linkType: soft
 
-"@datastax/ragstack-ai@npm:0.1.0, @datastax/ragstack-ai@workspace:packages/ragstack-ai":
+"@datastax/ragstack-ai@workspace:packages/ragstack-ai":
   version: 0.0.0-use.local
   resolution: "@datastax/ragstack-ai@workspace:packages/ragstack-ai"
   dependencies:
