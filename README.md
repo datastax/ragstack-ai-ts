@@ -1,4 +1,4 @@
-# RAGStack (TS)
+# RAGStack (for Javascript/Typescript)
 
 [RAGStack](https://www.datastax.com/products/ragstack) is an out-of-the-box solution simplifying Retrieval Augmented Generation (RAG) in GenAI apps.
 

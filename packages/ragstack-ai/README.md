@@ -1,4 +1,4 @@
-# RAGStack (TS)
+# RAGStack (for Javascript/Typescript)
 [![Release Notes](https://img.shields.io/github/v/release/datastax/ragstack-ai-ts.svg)](https://github.com/datastax/ragstack-ai-ts/releases)
 ![npm](https://img.shields.io/npm/dm/@datastax/ragstack-ai-ts)
 [![License: Business Source License](https://img.shields.io/badge/License-BSL-yellow.svg)](https://github.com/datastax/ragstack-ai/blob/main/LICENSE.txt)
