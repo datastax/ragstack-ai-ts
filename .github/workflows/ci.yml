@@ -11,7 +11,7 @@ on:
       - main
 
 concurrency:
-  group: ragstack-e2e-tests-${{ github.workflow }}-${{ github.ref }}
+  group: ragstack-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
