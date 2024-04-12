@@ -31,9 +31,9 @@ jobs:
         run: yarn
       - name: Build
         run: |
-          yarn workspace @datastax/ragstack-ai-ts build
+          yarn workspace @datastax/ragstack-ai build
           yarn workspace @datastax/ragstack-ai-cli build
-          yarn workspace @datastax/ragstack-ai-ts set-lib-version
+          yarn workspace @datastax/ragstack-ai set-lib-version
           yarn workspace @datastax/ragstack-ai-cli set-lib-version
       - name: Check working directory
         run: |
@@ -46,7 +46,7 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: Run unit tests
-        run: yarn workspace @datastax/ragstack-ai-ts test:unit
+        run: yarn workspace @datastax/ragstack-ai test:unit
       - name: Run unit tests (CLI)
         run: |
           yarn workspace @datastax/ragstack-ai-cli test

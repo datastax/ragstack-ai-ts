@@ -3,7 +3,7 @@ name: Release RAGStack package
 on:
   push:
     tags:
-      - "ragstack-ai-ts-*"
+      - "ragstack-ai-*"
 
 jobs:
   release:
@@ -23,7 +23,7 @@ jobs:
         env:
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          cd packages/ragstack-ai-ts
+          cd packages/ragstack-ai
           yarn run release:publish
 
       - name: Create GitHub Release
@@ -37,7 +37,7 @@ jobs:
         id: release-number
         shell: bash
         run: |
-          echo "release-number=$(echo ${{ github.ref }} | sed -e 's/refs\/tags\/ragstack-ai-ts-//')" >> $GITHUB_OUTPUT
+          echo "release-number=$(echo ${{ github.ref }} | sed -e 's/refs\/tags\/ragstack-ai-//')" >> $GITHUB_OUTPUT
 
       - name: Update API reference
         uses: ./.github/actions/deploy-api-reference

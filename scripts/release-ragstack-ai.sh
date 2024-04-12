@@ -10,12 +10,12 @@ if [ -n "$(git status --porcelain)" ]; then
     echo "Working directory not clean"
     exit 1
 fi
-tag="ragstack-ai-ts-$version"
+tag="ragstack-ai-$version"
 
 git checkout main
 git pull
 echo ":: Bumping version to $version"
-cd packages/ragstack-ai-ts
+cd packages/ragstack-ai
 export NEW_VERSION=$version
 yarn run release:set-version
 cd ../..

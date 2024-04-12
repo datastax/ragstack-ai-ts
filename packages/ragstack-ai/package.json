@@ -1,5 +1,5 @@
 {
-  "name": "@datastax/ragstack-ai-ts",
+  "name": "@datastax/ragstack-ai",
   "description": "DataStax RAGStack TS",
   "version": "1.0.4",
   "license": "BUSL-1.1",

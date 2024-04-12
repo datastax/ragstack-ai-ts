@@ -1,5 +1,5 @@
 {
-  "name": "ragstack-ai-ts-parent",
+  "name": "ragstack-ai-parent",
   "private": true,
   "workspaces": [
     "packages/*"
