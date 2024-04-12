@@ -1,13 +1,15 @@
 import {expect, test} from "@jest/globals";
-import fs from "fs";
+import {main} from "../../dist/cli";
+import * as os from "os";
+// @ts-ignore
 import path from "path";
-import {main} from "../../src/cli";
-import {tmpdir} from "node:os";
+// @ts-ignore
+import fs from "fs";
 
 describe("Test", () => {
 
     test('test add deps', async () => {
-        const tempDir = fs.mkdtempSync(path.join(tmpdir(), "test"))
+        const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "test"))
 
         const packageJson = path.join(tempDir, 'package.json');
         fs.writeFileSync(packageJson, JSON.stringify({
@@ -25,7 +27,6 @@ describe("Test", () => {
         })
 
         const parsed = JSON.parse(fs.readFileSync(packageJson, 'utf-8'))
-        console.log("after json", parsed)
         expect(Object.keys(parsed.dependencies).length).toBe(1)
         expect(parsed.dependencies["@datastax/ragstack-ai"]).toBeTruthy()
         expect(Object.keys(parsed.devDependencies).length).toBe(8)
