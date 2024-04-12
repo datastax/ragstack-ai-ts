@@ -16,6 +16,8 @@ For each open-source project included in RAGStack, we select a version lineup an
 RAGStack uses the [Astra DB Serverless (Vector) database](https://docs.datastax.com/en/astra/astra-db-vector/get-started/quickstart.html), which provides a highly performant and scalable vector store for RAG workloads like question answering, semantic search, and semantic caching.
 
 ## ⚡️ Quickstart
+
+Install `@datastax/ragstack-ai` via the CLI:
 ```bash
 npx @datastax/ragstack-ai-cli install
 ```

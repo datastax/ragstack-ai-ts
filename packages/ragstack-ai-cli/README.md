@@ -16,7 +16,7 @@ Move your terminal to the project you want to install RAGStack in and run the fo
 ```bash
 npx @datastax/ragstack-ai-cli install 
 ```
-This will modify the `package.json` and refresh your local dependencies.
+This will modify the `package.json`, install `@datastax/ragstack-ai` and refresh your local dependencies.
 The supported package managers are `npm` and `yarn` (both classic and berry).
 
 The CLI automatically detects the package manager you are using and installs the correct version of RAGStack.

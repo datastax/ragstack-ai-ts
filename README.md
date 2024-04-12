@@ -17,11 +17,11 @@ Looking for the Python version? Check out [RAGStack for Python](https://github.c
 
 ### Yarn
 ```bash
-npx @datastax/ragstack-ai-cli install --use-yarn    
+npx @datastax/ragstack-ai-cli install --use-yarn
 ```
 ### NPM
 ```bash
-npx @datastax/ragstack-ai-cli install --use-yarn
+npx @datastax/ragstack-ai-cli install --use-npm
 ```
 
 ## 📖 Documentation
