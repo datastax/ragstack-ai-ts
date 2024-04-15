@@ -129,7 +129,7 @@ describe("Astra tests", () => {
             await vectorStore.initialize()
             fail("Should have thrown an error")
         } catch (e: unknown) {
-            expect((e as Error).message).toContain("401")
+            expect((e as Error).message).toContain("Authentication failed")
         }
     });
 
@@ -179,7 +179,7 @@ describe("Astra tests", () => {
             await vectorStore.similaritySearch("RAGStack", 1, {"$vector": [0.1]})
             fail("Should have thrown an error")
         } catch (e: unknown) {
-            expect((e as Error).message).toContain("INVALID_FILTER_EXPRESSION")
+            expect((e as Error).message).toContain("Cannot filter on '$vector' field using operator '$eq': only '$exists' is supported")
         }
 
         docs = await vectorStore.maxMarginalRelevanceSearch("RAGStack", {k: 1, filter: {"name": "Homepage"}})

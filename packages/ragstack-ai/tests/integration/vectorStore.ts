@@ -33,7 +33,6 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
 
     constructor() {
         this.token = getRequiredEnv("ASTRA_DB_APPLICATION_TOKEN")
-        console.log(this.token)
         this.endpoint = getRequiredEnv("ASTRA_DB_API_ENDPOINT")
         this.databaseId = getRequiredEnv("ASTRA_DB_ID")
         const env = (process.env["ASTRA_DB_ENV"] || "prod").toLowerCase()
@@ -55,9 +54,7 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
         const dataAPIClient = new DataAPIClient(this.token);
         try {
             const astraDbClient = dataAPIClient.db(this.endpoint)
-            const httpClient = (Reflect.get(astraDbClient, "_httpClient"))
-            const apiResponse = await httpClient.executeCommand({"findCollections": {}}, null);
-            const collections = apiResponse.status.collections
+            const collections = await astraDbClient.listCollections({nameOnly: true})
             console.log("Found collections: ", collections)
             for (const collection of collections) {
                 console.log("Deleting collection: ", collection)
