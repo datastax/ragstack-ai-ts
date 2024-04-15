@@ -2,8 +2,8 @@ import {getVectorStoreHandler, testIf} from '../config';
 import {AstraDBVectorStore, AstraLibArgs} from "@langchain/community/vectorstores/astradb";
 import {FakeEmbeddings} from "@langchain/core/utils/testing";
 import {Document} from "@langchain/core/documents";
-import {CreateCollectionOptions} from "@datastax/astra-db-ts/dist/collections/options";
 import {VectorDatabaseTypeNotSupported} from "../vectorStore";
+import {CreateCollectionOptions} from "@datastax/astra-db-ts";
 
 describe("Astra tests", () => {
     let supported: boolean = true
@@ -25,7 +25,7 @@ describe("Astra tests", () => {
         await getVectorStoreHandler().afterTest()
     })
 
-    const fakeEmbeddingsCollectionOptions: CreateCollectionOptions = {
+    const fakeEmbeddingsCollectionOptions: CreateCollectionOptions<any> = {
         vector: {
             dimension: 4,
             metric: "cosine",

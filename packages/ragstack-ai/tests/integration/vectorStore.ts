@@ -1,10 +1,9 @@
 import {AstraLibArgs} from "@langchain/community/vectorstores/astradb";
-import {AstraDB} from "@datastax/astra-db-ts";
 import {CassandraLibArgs} from "@langchain/community/vectorstores/cassandra";
-import {HTTPClient} from "@datastax/astra-db-ts/dist/client";
 import {getRequiredEnv} from "./config";
 import {Client} from "cassandra-driver";
 import {GenericContainer, StartedTestContainer, Wait} from "testcontainers";
+import {DataAPIClient} from "@datastax/astra-db-ts";
 
 
 export class VectorDatabaseTypeNotSupported extends Error {
@@ -53,14 +52,19 @@ export class AstraDBVectorStoreHandler implements VectorStoreHandler {
 
 
     private async deleteAllCollections() {
-        const astraDbClient = new AstraDB(this.token, this.endpoint)
-        const httpClient: HTTPClient = (Reflect.get(astraDbClient, "httpClient") as HTTPClient)
-        const apiResponse = await httpClient.executeCommand({"findCollections": {}}, null);
-        const collections = apiResponse.status.collections
-        console.log("Found collections: ", collections)
-        for (const collection of collections) {
-            console.log("Deleting collection: ", collection)
-            await astraDbClient.dropCollection(collection)
+        const dataAPIClient = new DataAPIClient(this.token);
+        try {
+            const astraDbClient = dataAPIClient.db(this.endpoint)
+            const httpClient = (Reflect.get(astraDbClient, "_httpClient"))
+            const apiResponse = await httpClient.executeCommand({"findCollections": {}}, null);
+            const collections = apiResponse.status.collections
+            console.log("Found collections: ", collections)
+            for (const collection of collections) {
+                console.log("Deleting collection: ", collection)
+                await astraDbClient.dropCollection(collection)
+            }
+        } finally {
+            await dataAPIClient.close()
         }
     }
 
