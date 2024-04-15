@@ -2,8 +2,8 @@ import {getVectorStoreHandler, testIf} from '../config';
 import {AstraDBVectorStore, AstraLibArgs} from "@langchain/community/vectorstores/astradb";
 import {FakeEmbeddings} from "@langchain/core/utils/testing";
 import {Document} from "@langchain/core/documents";
-import {CreateCollectionOptions} from "@datastax/astra-db-ts/dist/collections/options";
 import {VectorDatabaseTypeNotSupported} from "../vectorStore";
+import {CreateCollectionOptions} from "@datastax/astra-db-ts";
 
 describe("Astra tests", () => {
     let supported: boolean = true
@@ -25,7 +25,7 @@ describe("Astra tests", () => {
         await getVectorStoreHandler().afterTest()
     })
 
-    const fakeEmbeddingsCollectionOptions: CreateCollectionOptions = {
+    const fakeEmbeddingsCollectionOptions: CreateCollectionOptions<any> = {
         vector: {
             dimension: 4,
             metric: "cosine",
@@ -129,7 +129,7 @@ describe("Astra tests", () => {
             await vectorStore.initialize()
             fail("Should have thrown an error")
         } catch (e: unknown) {
-            expect((e as Error).message).toContain("401")
+            expect((e as Error).message).toContain("Authentication failed")
         }
     });
 
@@ -179,7 +179,7 @@ describe("Astra tests", () => {
             await vectorStore.similaritySearch("RAGStack", 1, {"$vector": [0.1]})
             fail("Should have thrown an error")
         } catch (e: unknown) {
-            expect((e as Error).message).toContain("INVALID_FILTER_EXPRESSION")
+            expect((e as Error).message).toContain("Cannot filter on '$vector' field using operator '$eq': only '$exists' is supported")
         }
 
         docs = await vectorStore.maxMarginalRelevanceSearch("RAGStack", {k: 1, filter: {"name": "Homepage"}})

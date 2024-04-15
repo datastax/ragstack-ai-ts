@@ -21,11 +21,9 @@ import {GoogleVertexAIMultimodalEmbeddings} from "langchain/experimental/multimo
 import * as path from "node:path";
 import { EmbeddingsInterface} from "@langchain/core/embeddings";
 import {ChatGoogleGenerativeAI} from "@langchain/google-genai";
-import {BaseLanguageModel} from "@langchain/core/language_models/base";
 import {AIMessage, HumanMessage} from "@langchain/core/messages";
 import {expect} from "@jest/globals";
 import {randomUUID} from "node:crypto";
-import {BaseChatModel} from "@langchain/core/language_models/chat_models";
 
 
 function vertexSetup() {

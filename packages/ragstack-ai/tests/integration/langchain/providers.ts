@@ -5,13 +5,13 @@ import {VectorDatabaseTypeNotSupported} from "../vectorStore";
 import {VectorStore} from "@langchain/core/vectorstores";
 import {AstraDBVectorStore, AstraLibArgs} from "@langchain/community/vectorstores/astradb";
 import {BaseListChatMessageHistory} from "@langchain/core/chat_history";
-import {AstraDB} from "@datastax/astra-db-ts";
 import {AstraDBChatMessageHistory} from "@langchain/community/stores/message/astradb";
 import {randomUUID} from "node:crypto";
 import {CassandraLibArgs, CassandraStore} from "@langchain/community/vectorstores/cassandra";
 import {CassandraChatMessageHistory} from "@langchain/community/stores/message/cassandra";
 import {Client} from "cassandra-driver";
 import {BaseChatModel} from "@langchain/core/language_models/chat_models";
+import {DataAPIClient} from "@datastax/astra-db-ts";
 
 
 export interface Skippable {
@@ -166,8 +166,7 @@ export class AstraDBVectorStoreSupplier implements VectorStoreSupplier {
 
     async newChatHistory(): Promise<BaseListChatMessageHistory> {
         const baseAstraLibArgs = getVectorStoreHandler().getBaseAstraLibArgs();
-        const client = new AstraDB(
-            baseAstraLibArgs.token,
+        const client = new DataAPIClient(baseAstraLibArgs.token).db(
             baseAstraLibArgs.endpoint
         );
         const collectionName = baseAstraLibArgs.collection + "_chat_history";
