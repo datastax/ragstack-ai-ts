@@ -1,7 +1,7 @@
 {
   "name": "@datastax/ragstack-ai",
   "description": "DataStax RAGStack for Javascript/Typescript",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "BUSL-1.1",
   "author": {
     "name": "DataStax"
