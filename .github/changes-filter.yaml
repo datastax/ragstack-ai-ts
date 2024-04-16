@@ -1,6 +1,6 @@
 # https://github.com/dorny/paths-filter
 e2e_tests:
-  - added|deleted|modified: "ragstack-ai/**"
+  - added|deleted|modified: "packages/ragstack-ai/**"
   - "./.github/actions/**"
   - "./.github/workflows/ci.yml"
   - "./.github/workflows/_run_e2e_tests.yml"
