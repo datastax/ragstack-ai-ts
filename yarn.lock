@@ -1394,16 +1394,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datastax/astra-db-ts@npm:1.0.0":
-  version: 1.0.0
-  resolution: "@datastax/astra-db-ts@npm:1.0.0"
+"@datastax/astra-db-ts@npm:1.0.1":
+  version: 1.0.1
+  resolution: "@datastax/astra-db-ts@npm:1.0.1"
   dependencies:
     bson-objectid: "npm:^2.0.4"
     fetch-h2: "npm:^3.0.2"
     object-hash: "npm:^3.0.0"
     typed-emitter: "npm:^2.1.0"
     uuidv7: "npm:^0.6.3"
-  checksum: 10c0/a6ff043f4b3a7e965a09a229f54118f929246fa62be32c6b9a3c4884ef11bb6d4d6eb421e47368031f9ea45d7da591be6ed5085c8a64a1a505e4634ac28cdb59
+  checksum: 10c0/b439fc9db08ff82bde497767d93ea16d80935b9e9896bbe10d104cd2df9943bb3d84d4d8686981d12a97c05d079122026f8250567ecc8ac5d041b97bb263fc7d
   languageName: node
   linkType: hard
 
@@ -1432,7 +1432,7 @@ __metadata:
     "@aws-sdk/credential-provider-node": "npm:^3.525.0"
     "@aws-sdk/types": "npm:^3.523.0"
     "@azure/storage-blob": "npm:^12.17.0"
-    "@datastax/astra-db-ts": "npm:1.0.0"
+    "@datastax/astra-db-ts": "npm:1.0.1"
     "@langchain/azure-openai": "npm:0.0.2"
     "@langchain/community": "npm:0.0.48"
     "@langchain/core": "npm:0.1.57"
