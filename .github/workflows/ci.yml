@@ -2,8 +2,7 @@ name: CI
 on:
   workflow_dispatch: {}
   schedule:
-    # astra dev and dse - every 2 hours
-    - cron: "0 */2 * * *"
+    - cron: "0 3 * * *"
   pull_request:
     paths-ignore:
       - "README.md"
