@@ -17,13 +17,15 @@ import {GoogleVertexAIEmbeddings} from "@langchain/community/embeddings/googleve
 import {ChatGoogleVertexAI} from "@langchain/community/chat_models/googlevertexai";
 import {BedrockChat} from "@langchain/community/chat_models/bedrock";
 import {BedrockEmbeddings} from "@langchain/community/embeddings/bedrock";
-import {GoogleVertexAIMultimodalEmbeddings} from "langchain/experimental/multimodal_embeddings/googlevertexai";
 import * as path from "node:path";
 import { EmbeddingsInterface} from "@langchain/core/embeddings";
 import {ChatGoogleGenerativeAI} from "@langchain/google-genai";
 import {AIMessage, HumanMessage} from "@langchain/core/messages";
 import {expect} from "@jest/globals";
 import {randomUUID} from "node:crypto";
+import {
+    GoogleVertexAIMultimodalEmbeddings
+} from "@langchain/community/experimental/multimodal_embeddings/googlevertexai";
 
 
 function vertexSetup() {
