@@ -27,6 +27,7 @@
     "@langchain/community": "0.2.4",
     "@langchain/core": "0.2.2",
     "@langchain/openai": "0.0.34",
+    "@langchain/google-vertexai": "0.0.17",
     "cassandra-driver": "4.7.2",
     "langchain": "0.2.3",
     "langsmith": "0.1.8"
