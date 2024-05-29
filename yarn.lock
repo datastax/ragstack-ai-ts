@@ -796,6 +796,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@azure-rest/core-client@npm:^1.1.7":
+  version: 1.4.0
+  resolution: "@azure-rest/core-client@npm:1.4.0"
+  dependencies:
+    "@azure/abort-controller": "npm:^2.0.0"
+    "@azure/core-auth": "npm:^1.3.0"
+    "@azure/core-rest-pipeline": "npm:^1.5.0"
+    "@azure/core-tracing": "npm:^1.0.1"
+    "@azure/core-util": "npm:^1.0.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/be389a5ba39f97d09f9a927c07caac2a6dc8e607bcdcf1b81f25c43ea78192b3d6414af79962531948c14314edc1363aead27fbe96a8a93b41cfc9b297c2e2e9
+  languageName: node
+  linkType: hard
+
 "@azure/abort-controller@npm:^1.0.0":
   version: 1.1.0
   resolution: "@azure/abort-controller@npm:1.1.0"
@@ -822,6 +836,17 @@ __metadata:
     "@azure/core-util": "npm:^1.1.0"
     tslib: "npm:^2.6.2"
   checksum: 10c0/34ea323097174495cd4cfc291cc39de7af53523a7fbc31b6fd3468c8dd47aa214734b4ddb540c70da8d693fc57629ed52337b5d770a940a97e9edb18f3d285a7
+  languageName: node
+  linkType: hard
+
+"@azure/core-auth@npm:^1.4.0, @azure/core-auth@npm:^1.5.0":
+  version: 1.7.2
+  resolution: "@azure/core-auth@npm:1.7.2"
+  dependencies:
+    "@azure/abort-controller": "npm:^2.0.0"
+    "@azure/core-util": "npm:^1.1.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/2b4c489855308cea46363dc8f216eeb63cb85aea08f1ab7cff0a6e47604eed2b0fc46415d7f6d71da0aa7922b81c631920d05698eb14454b65be07825c5c599a
   languageName: node
   linkType: hard
 
@@ -868,6 +893,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@azure/core-rest-pipeline@npm:^1.13.0, @azure/core-rest-pipeline@npm:^1.5.0":
+  version: 1.16.0
+  resolution: "@azure/core-rest-pipeline@npm:1.16.0"
+  dependencies:
+    "@azure/abort-controller": "npm:^2.0.0"
+    "@azure/core-auth": "npm:^1.4.0"
+    "@azure/core-tracing": "npm:^1.0.1"
+    "@azure/core-util": "npm:^1.9.0"
+    "@azure/logger": "npm:^1.0.0"
+    http-proxy-agent: "npm:^7.0.0"
+    https-proxy-agent: "npm:^7.0.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/9a798563eb1514e1eabaa9c072c3dc0d25ca837e94bf1e778431a749b3634d661866fe00ac0f49dd2938917001a241ea2de84ac6ea5179b5410b3a0807054a0b
+  languageName: node
+  linkType: hard
+
+"@azure/core-sse@npm:^2.0.0":
+  version: 2.1.2
+  resolution: "@azure/core-sse@npm:2.1.2"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/40c8199caefae6ada133105a445a1c08e7e37b8c6a6691c269e877a7b6edef24cef32d54b8cd10205203155ada43e2a9d7558dc2369f3ae3bbaa92b0fbb69513
+  languageName: node
+  linkType: hard
+
 "@azure/core-tracing@npm:1.0.0-preview.13":
   version: 1.0.0-preview.13
   resolution: "@azure/core-tracing@npm:1.0.0-preview.13"
@@ -875,6 +925,25 @@ __metadata:
     "@opentelemetry/api": "npm:^1.0.1"
     tslib: "npm:^2.2.0"
   checksum: 10c0/0977479165deefe1dcabbd68d18e44742ad18fa4bd0200b9d8b6647510c200800e8b47f8039a249086de9ff7eda37ea3f2beb85fa4878a08dd0251a71ea0cbe3
+  languageName: node
+  linkType: hard
+
+"@azure/core-tracing@npm:^1.0.1":
+  version: 1.1.2
+  resolution: "@azure/core-tracing@npm:1.1.2"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/0e844d581117ae81318a503ddfc143146b847ed9152d0c84f20fdc4cb0b2187a4e9da29aed13d5b7a201f39fe601a59c4db6455005ed8e0d3b5aab0ee77a56e1
+  languageName: node
+  linkType: hard
+
+"@azure/core-util@npm:^1.0.0, @azure/core-util@npm:^1.4.0, @azure/core-util@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "@azure/core-util@npm:1.9.0"
+  dependencies:
+    "@azure/abort-controller": "npm:^2.0.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/6eb6efc8b8401fd6e3b56631e8e9a1dbc23a0048ae3bf498d10163624f805032a7730905465b2ebe95c840e5e939e66bf320448de8df50f66346e89b1295f9e7
   languageName: node
   linkType: hard
 
@@ -894,6 +963,30 @@ __metadata:
   dependencies:
     tslib: "npm:^2.6.2"
   checksum: 10c0/79014d78774b7a24c236a9c83550e9769c39cb6d4469c23ab35998dd1a67fed8fd43c947eb7382cdeab826747fa7fabc686a37e4aee67535cc6ce5e0302c9323
+  languageName: node
+  linkType: hard
+
+"@azure/logger@npm:^1.0.3":
+  version: 1.1.2
+  resolution: "@azure/logger@npm:1.1.2"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/829c1da363b8fe732ca26326400575dc824e1032974dc499db539e9599e0e4f1b1f4bf936b68329171fece7e2d4bba3ffaaebb35ac60b73db4715c6dc026147a
+  languageName: node
+  linkType: hard
+
+"@azure/openai@npm:1.0.0-beta.11":
+  version: 1.0.0-beta.11
+  resolution: "@azure/openai@npm:1.0.0-beta.11"
+  dependencies:
+    "@azure-rest/core-client": "npm:^1.1.7"
+    "@azure/core-auth": "npm:^1.4.0"
+    "@azure/core-rest-pipeline": "npm:^1.13.0"
+    "@azure/core-sse": "npm:^2.0.0"
+    "@azure/core-util": "npm:^1.4.0"
+    "@azure/logger": "npm:^1.0.3"
+    tslib: "npm:^2.4.0"
+  checksum: 10c0/7c28b047cdbb05507599264f0ea447af813c95eebb1659e5edc18253ffcba84cf5e314423714c8580538f9d38eab3cd28d93fe43eaba9d12233fcfa005230a16
   languageName: node
   linkType: hard
 
@@ -1353,6 +1446,7 @@ __metadata:
     "@aws-sdk/types": "npm:^3.523.0"
     "@azure/storage-blob": "npm:^12.17.0"
     "@datastax/astra-db-ts": "npm:1.0.1"
+    "@langchain/azure-openai": "npm:0.0.2"
     "@langchain/community": "npm:0.2.4"
     "@langchain/core": "npm:0.2.2"
     "@langchain/google-genai": "npm:*"
@@ -1749,6 +1843,20 @@ __metadata:
     "@jridgewell/resolve-uri": "npm:^3.1.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.14"
   checksum: 10c0/3d1ce6ebc69df9682a5a8896b414c6537e428a1d68b02fcc8363b04284a8ca0df04d0ee3013132252ab14f2527bc13bea6526a912ecb5658f0e39fd2860b4df4
+  languageName: node
+  linkType: hard
+
+"@langchain/azure-openai@npm:0.0.2":
+  version: 0.0.2
+  resolution: "@langchain/azure-openai@npm:0.0.2"
+  dependencies:
+    "@azure/core-auth": "npm:^1.5.0"
+    "@azure/openai": "npm:1.0.0-beta.11"
+    "@langchain/core": "npm:~0.1.9"
+    js-tiktoken: "npm:^1.0.7"
+    zod: "npm:^3.22.3"
+    zod-to-json-schema: "npm:3.20.3"
+  checksum: 10c0/15a45d985b35a70786292e17ae6bbd6b0af3368a85bac4a444620d1b3507cd1083f4f87cfc554547172da42b750738c8489ad8a81abe1c68cba70aeb60c18687
   languageName: node
   linkType: hard
 
@@ -5159,7 +5267,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"https-proxy-agent@npm:^7.0.1":
+"https-proxy-agent@npm:^7.0.0, https-proxy-agent@npm:^7.0.1":
   version: 7.0.4
   resolution: "https-proxy-agent@npm:7.0.4"
   dependencies:
@@ -5909,7 +6017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-tiktoken@npm:^1.0.12":
+"js-tiktoken@npm:^1.0.12, js-tiktoken@npm:^1.0.7":
   version: 1.0.12
   resolution: "js-tiktoken@npm:1.0.12"
   dependencies:
@@ -7926,7 +8034,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.1.0, tslib@npm:^2.2.0, tslib@npm:^2.3.1, tslib@npm:^2.6.2":
+"tslib@npm:^2.1.0, tslib@npm:^2.2.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.6.2":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 10c0/e03a8a4271152c8b26604ed45535954c0a45296e32445b4b87f8a5abdb2421f40b59b4ca437c4346af0f28179780d604094eb64546bee2019d903d01c6c19bdb
@@ -8327,6 +8435,15 @@ __metadata:
     compress-commons: "npm:^4.1.2"
     readable-stream: "npm:^3.6.0"
   checksum: 10c0/38f91ca116a38561cf184c29e035e9453b12c30eaf574e0993107a4a5331882b58c9a7f7b97f63910664028089fbde3296d0b3682d1ccb2ad96929e68f1b2b89
+  languageName: node
+  linkType: hard
+
+"zod-to-json-schema@npm:3.20.3":
+  version: 3.20.3
+  resolution: "zod-to-json-schema@npm:3.20.3"
+  peerDependencies:
+    zod: ^3.20.0
+  checksum: 10c0/02e343df79936323482fd153c4e4ab68c0ced02fc2fdd8711cb6b21d158179e44202aa490c66bcd0bece99080fcd4ca5993d08a7bf2dcf4dcff2502239c5e6a0
   languageName: node
   linkType: hard
 
