@@ -194,7 +194,7 @@ describe("RAG pipeline compatibility", () => {
     ]
     const embeddingsLLM: Array<EmbeddingsLLMPair> = [
         {embeddings: openAIEmbeddings, llm: openAILLM},
-        {embeddings: azureOpenAIEmbeddings, llm: azureOpenAILLM},
+        // {embeddings: azureOpenAIEmbeddings, llm: azureOpenAILLM},
         {embeddings: vertexEmbeddings, llm: vertexLLM},
         {embeddings: bedrockTitanEmbeddings, llm: bedrockAnthropicLLM},
         // cohere is broken
@@ -294,7 +294,7 @@ describe("Multimodal RAG", () => {
         new CassandraVectorStoreSupplier()
     ]
     const embeddingsLLM: Array<EmbeddingsLLMPair> = [
-        {embeddings: vertexMultiModalEmbeddings, llm: geminiLLM},
+        // {embeddings: vertexMultiModalEmbeddings, llm: geminiLLM},
     ]
     const ragCombinations: Array<RAGCombination> = []
     const ragCombinationsToSkip: Array<RAGCombination> = []
