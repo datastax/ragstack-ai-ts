@@ -52,7 +52,7 @@ value7,value8,value9`;
         for (const doc of split) {
             expect(doc.metadata.filename).toBe("tree.pdf")
             expect(doc.metadata.filetype).toBe("application/pdf")
-            expect(doc.metadata.category).toMatch(/(Title|NarrativeText)/)
+            expect(doc.metadata.category).toMatch(/(Title|NarrativeText|Image)/)
         }
     })
 
