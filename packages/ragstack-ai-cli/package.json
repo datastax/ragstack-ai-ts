@@ -1,7 +1,7 @@
 {
   "name": "@datastax/ragstack-ai-cli",
   "description": "DataStax RAGStack CLI",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "license": "BUSL-1.1",
   "author": {
     "name": "DataStax"
